@@ -24,10 +24,16 @@ struct PredictingView: View {
         }
         Button(
             action: {
+                
+                /**
+                 README!
+                    change this based on PreferenceDto
+                 You can use dict or json to build your own preferences
+                 */
                 let jsonDict: [String: Any] = [
-//                    "Coffee_Tea": 1,
+                    "Coffee_Tea": 1,
                     "Juice_Beverages": 1,
-//                    "Meat_Protein": 1
+                    //"Meat_Protein": 1
                 ]
                 
                 if let preferences = PreferenceDto.fromJson(jsonDict) {
@@ -46,7 +52,7 @@ struct PredictingView: View {
                     .foregroundColor(.white)
                     .frame(height: 48) // This was Sizing.xxl
                     .frame(maxWidth: .infinity)
-                    .background(Color(hex: "#973131")) // This was Color.primary
+                    .background(Color.blue) // This was Color.primary
                     .cornerRadius(8) // This was Sizing.sm
                     .padding(.horizontal)
             }
