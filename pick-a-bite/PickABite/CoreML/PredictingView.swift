@@ -31,13 +31,14 @@ struct PredictingView: View {
                  You can use dict or json to build your own preferences
                  */
                 let jsonDict: [String: Any] = [
-                    "Coffee_Tea": 1,
-                    "Juice_Beverages": 1,
-                    //"Meat_Protein": 1
+//                    "Coffee_Tea": 1,
+//                    "Seafood": 1,
+//                    "Juice_Beverages": 1,
+                    "Meat_Protein": 1
                 ]
                 
                 if let preferences = PreferenceDto.fromJson(jsonDict) {
-                    print(preferences)
+//                    print(preferences)
                 } else {
                     Logger.error("Failed to parse JSON")
                 }

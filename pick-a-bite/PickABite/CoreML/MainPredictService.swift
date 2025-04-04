@@ -43,7 +43,6 @@ final class MainPredictService {
             )
             
             let output = try model.prediction(input: input)
-            Logger.log("\(output)")
             return output.nameProbability
         } catch let err {
             Logger.error(err.localizedDescription)

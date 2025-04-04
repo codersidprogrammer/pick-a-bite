@@ -60,7 +60,7 @@ struct PreferenceDto: Codable {
             let jsonData = try JSONSerialization.data(withJSONObject: dictionary)
             return try JSONDecoder().decode(PreferenceDto.self, from: jsonData)
         } catch {
-            print("❌ JSON Parsing Error: \(error.localizedDescription)")
+            Logger.error("❌ JSON Parsing Error: \(error.localizedDescription)")
             return nil
         }
     }
