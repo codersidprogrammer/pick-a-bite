@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct ChipComponentView: View {
+    var icon: String
+    var text: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack{
+            Image(systemName: icon)
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundColor(.white)
+            
+            Text(text)
+                .font(.caption)
+                .fontWeight(.medium)
+                .padding(.trailing, Sizing.xs)
+                .foregroundStyle(.white)
+        }
+        .padding(.all, Sizing.sm)
+        .background(Color.primary)
+        .clipShape(Capsule())
     }
 }
 
 #Preview {
-    ChipComponentView()
+    ChipComponentView(icon: "person.crop.circle", text: "dimass")
 }
