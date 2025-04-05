@@ -12,6 +12,8 @@ class RouletteController: ObservableObject {
     @Published var rotation: Double = 0
     @Published var selectedSegment: SegmentData
     @Published var isSelected: Bool = false
+    @Published var countChange: Int = 3
+    @Published var havingChange: Bool = true
     
     var isSpinning: Bool = false
     let totalSpinDuration: Double = 5.0
@@ -26,14 +28,16 @@ class RouletteController: ObservableObject {
     }
     
     func setSegment(data: [SegmentData]) {
-        if segmentData.count != 0 {
-            Logger.log("Resetting list")
-            segmentData.removeAll()
-        }
+        segmentData.removeAll()
         segmentData = data
     }
     
     func spin() {
+        guard countChange != 0 else {
+            Logger.error("Count is zero: \(countChange)")
+            havingChange = false
+            return
+        }
         guard !isSpinning else { return }
         
         isSpinning = true
@@ -62,6 +66,7 @@ class RouletteController: ObservableObject {
             Logger.log("-------------------------")
             this.selectedSegment = winner
             this.isSelected = true
+            this.countChange -= 1
         }
     }
     
