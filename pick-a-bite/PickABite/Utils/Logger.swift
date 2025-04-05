@@ -15,9 +15,31 @@ enum LogLevel: String {
 }
 
 struct Logger {
-    static func log(_ message: String, level: LogLevel = .info) {
+    static func log(
+        _ message: String,
+        level: LogLevel = .info,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
         let timestamp = formattedTimeStamp()
-        print("\(timestamp) \(level.rawValue) \(message)")
+        let filename = (file as NSString).lastPathComponent
+        print("\(timestamp) \(level.rawValue)[\(filename):\(line)] \(function) → \(message)")
+    }
+    
+    static func log(dictionary: [String: Any],
+                    level: LogLevel = .info,
+                    file: String = #file,
+                    function: String = #function,
+                    line: Int = #line) {
+        
+        var result = ""
+        for (key, value) in dictionary {
+            result += "\(key): \(value)\n"
+        }
+        
+        let message = result.trimmingCharacters(in: .whitespacesAndNewlines)
+        log(message, level: level, file: file, function: function, line: line)
     }
     
     static func error(_ message: String) {
