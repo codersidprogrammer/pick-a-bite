@@ -44,39 +44,17 @@ struct HalfSheetView: View {
     @Binding var selectedSegment: SegmentData
     var body: some View {
         VStack(alignment: .leading){
-            HStack(alignment: .center, spacing: Sizing.xl) {
-                Image("default_restaurant")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: Sizing.xl3 , height: Sizing.xl3)
-                    .clipShape(RoundedRectangle(cornerRadius: Sizing.sm))
-                
-                VStack(alignment: .leading) {
-                    Text("STARBUCKS")
-                        .font(.title)
-                    Text("Best Coffee in town")
-                        .font(.caption)
-                        .padding(.bottom, Sizing.md)
-                    
-                    HStack {
-                        Text("The Breeze")
-                            .font(.caption)
-                            .foregroundStyle(.gray)
-                        Text("•")
-                        Text("200m")
-                            .font(.caption)
-                            .foregroundStyle(.gray)
-                            .padding(.trailing, Sizing.xs)
-                    }
-                }
-                Button(action: {
-                    print("Icon button tapped")
-                }) {
-                    Image(systemName: "map.fill")
-                        .font(.title)
-                        .foregroundColor(.primary)
-                }
-            }
+            CardMediaComponentView(
+                title: selectedSegment.description,
+                subtitle: "default subtitle",
+                imageName: "default_restaurant",
+                location: "default location",
+                distance: "0",
+                buttonAction: {
+                    Logger.log("Came from half sheet")
+                },
+                buttonIconName: "map.fill"
+            )
             .padding(.vertical, Sizing.xl)
             .padding(.horizontal, Sizing.sm)
             
@@ -85,19 +63,11 @@ struct HalfSheetView: View {
                 .font(.headline)
                 .padding(.leading, Sizing.md)
             
-            Button(
+            
+            PrimaryButtonComponentView(
+                "Spin more (2x)",
                 action: {
-                    print("Pressed")
-                },
-                label: {
-                    Text("Spin more (2x)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(height: Sizing.xxl)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.primary)
-                        .cornerRadius(Sizing.sm)
-                        .padding(.horizontal)
+                    Logger.log("Came from component view")
                 }
             )
         }
@@ -134,7 +104,7 @@ struct RoulettePageView: View {
                     .navigationTitle("Roulette Page")
                     .navigationBarTitleDisplayMode(.inline)
                     .padding(.all, Sizing.md)
-                    .sheet(isPresented: .constant(true)  /* $rouletteController.isSelected */) {
+                    .sheet(isPresented: $rouletteController.isSelected) {
                         HalfSheetView(selectedSegment: $rouletteController.selectedSegment)
                             .presentationDetents([.medium, .large])
                             .presentationDragIndicator(.visible)
