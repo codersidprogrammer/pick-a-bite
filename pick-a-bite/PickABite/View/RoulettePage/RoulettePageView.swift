@@ -14,10 +14,10 @@ struct RoulettePageView: View {
     @StateObject var service: RoulettePageService = .init()
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     
-    var notHavingChange: Binding<Bool> {
+    var whenNotHavingChance: Binding<Bool> {
         Binding(
-            get: { !rouletteController.havingChange },
-            set: { rouletteController.havingChange = !$0 }
+            get: { !rouletteController.havingChance },
+            set: { rouletteController.havingChance = !$0 }
         )
     }
     
@@ -57,10 +57,10 @@ struct RoulettePageView: View {
                             .presentationDetents([.medium, .large])
                             .presentationDragIndicator(.visible)
                     }
-                    .alert("Unlucky!", isPresented: notHavingChange) {
+                    .alert("Unlucky!", isPresented: whenNotHavingChance) {
                         
                     } message: {
-                        Text("Unfortunatelly! you have no any changes now")
+                        Text("Unfortunatelly! you have no any chances now")
                     }
                     .onAppear(){
                         rouletteController.setSegment(data: service.predictAsSegmentData())

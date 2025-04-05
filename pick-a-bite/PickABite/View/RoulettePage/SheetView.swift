@@ -40,7 +40,7 @@ struct HalfSheetView: View {
                     rouletteController.isSelected.toggle()
                     rouletteController.spin()
                 },
-                isDisabled: !rouletteController.havingChange
+                isDisabled: !rouletteController.havingChance
             )
         }
     }

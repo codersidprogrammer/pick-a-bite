@@ -13,7 +13,7 @@ class RouletteController: ObservableObject {
     @Published var selectedSegment: SegmentData
     @Published var isSelected: Bool = false
     @Published var countChange: Int = 3
-    @Published var havingChange: Bool = true
+    @Published var havingChance: Bool = true
     
     var isSpinning: Bool = false
     let totalSpinDuration: Double = 5.0
@@ -35,7 +35,7 @@ class RouletteController: ObservableObject {
     func spin() {
         guard countChange != 0 else {
             Logger.error("Count is zero: \(countChange)")
-            havingChange = false
+            havingChance = false
             return
         }
         guard !isSpinning else { return }
