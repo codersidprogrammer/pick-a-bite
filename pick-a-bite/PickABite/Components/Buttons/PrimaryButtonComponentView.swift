@@ -27,6 +27,7 @@ struct PrimaryButtonComponentView: View {
                     .primaryTextButton()
             }
         )
+        .disabled(true)
     }
 }
 

@@ -42,6 +42,8 @@ class RoulettePageService: ObservableObject {
 
 struct HalfSheetView: View {
     @Binding var selectedSegment: SegmentData
+    var rouletteController: RouletteController
+    
     var body: some View {
         VStack(alignment: .leading){
             CardMediaComponentView(
@@ -68,6 +70,8 @@ struct HalfSheetView: View {
                 "Spin more (2x)",
                 action: {
                     Logger.log("Came from component view")
+                    rouletteController.isSelected.toggle()
+                    rouletteController.spin()
                 }
             )
         }
@@ -105,7 +109,8 @@ struct RoulettePageView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .padding(.all, Sizing.md)
                     .sheet(isPresented: $rouletteController.isSelected) {
-                        HalfSheetView(selectedSegment: $rouletteController.selectedSegment)
+                        HalfSheetView(selectedSegment: $rouletteController.selectedSegment, rouletteController: rouletteController
+                        )
                             .presentationDetents([.medium, .large])
                             .presentationDragIndicator(.visible)
                     }
