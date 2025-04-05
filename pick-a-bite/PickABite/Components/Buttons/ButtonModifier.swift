@@ -7,20 +7,22 @@
 import SwiftUI
 
 struct PrimaryTextButtonModifier: ViewModifier {
+    var isDisabled: Bool = false
+    
     func body(content: Content) -> some View {
         content
             .font(.headline)
             .foregroundColor(.white)
             .frame(height: Sizing.xxl)
             .frame(maxWidth: .infinity)
-            .background(Color.primary)
+            .background(isDisabled ? Color.gray.opacity(0.3) : Color.primary)
             .cornerRadius(Sizing.sm)
             .padding(.horizontal)
     }
 }
 
 extension View {
-    public func primaryTextButton() -> some View {
-        modifier(PrimaryTextButtonModifier())
+    public func primaryTextButton(isDisabled: Bool = false) -> some View {
+        modifier(PrimaryTextButtonModifier(isDisabled: isDisabled))
     }
 }

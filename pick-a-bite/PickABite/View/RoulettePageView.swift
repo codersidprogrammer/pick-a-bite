@@ -72,7 +72,8 @@ struct HalfSheetView: View {
                     Logger.log("Came from component view")
                     rouletteController.isSelected.toggle()
                     rouletteController.spin()
-                }
+                },
+                isDisabled: true
             )
         }
     }
@@ -118,7 +119,9 @@ struct RoulettePageView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .padding(.all, Sizing.md)
                     .sheet(isPresented: $rouletteController.isSelected) {
-                        HalfSheetView(selectedSegment: $rouletteController.selectedSegment, rouletteController: rouletteController
+                        HalfSheetView(
+                            selectedSegment: $rouletteController.selectedSegment,
+                            rouletteController: rouletteController
                         )
                             .presentationDetents([.medium, .large])
                             .presentationDragIndicator(.visible)

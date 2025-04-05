@@ -11,10 +11,12 @@ import SwiftUI
 struct PrimaryButtonComponentView: View {
     var text: String = ""
     var action: () -> Void
+    var isDisabled: Bool
     
-    init(_ text: String, action: @escaping () -> Void) {
+    init(_ text: String, action: @escaping () -> Void, isDisabled: Bool = false) {
         self.text = text
         self.action = action
+        self.isDisabled = isDisabled
     }
     
     var body: some View {
@@ -24,16 +26,17 @@ struct PrimaryButtonComponentView: View {
             },
             label: {
                 Text(text)
-                    .primaryTextButton()
+                    .primaryTextButton(isDisabled: isDisabled)
             }
         )
-        .disabled(true)
+        .disabled(isDisabled)
     }
 }
 
 #Preview {
     PrimaryButtonComponentView(
         "Click Me",
-        action: { print("Button Clicked") }
+        action: { print("Button Clicked") },
+        isDisabled: false
     )
 }
