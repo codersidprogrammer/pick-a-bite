@@ -84,6 +84,12 @@ struct RoulettePageView: View {
     @StateObject var service: RoulettePageService = .init()
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     
+    let dummyChip: [String:String] = [
+        "flame.fill": "Spicy",
+        "cup.and.heat.waves.fill": "Coffee",
+        "person.crop.circle.fill": "Cozy"
+    ]
+    
     var body: some View {
         NavigationView {
             VStack(alignment: .leading) {
@@ -93,12 +99,15 @@ struct RoulettePageView: View {
                     .padding(.horizontal, Sizing.md)
                     .padding(.top, Sizing.xl)
                 
-                HStack(spacing: Sizing.xs) {
-                    ChipComponentView(icon: "flame.fill", text: "Spicy")
-                    ChipComponentView(icon: "cup.and.heat.waves.fill", text: "Coffee")
-                    ChipComponentView(icon: "person.crop.circle.fill", text: "Cozy")
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: Sizing.xs) {
+                        ForEach(Array(dummyChip), id: \.key) { icon, value in
+                            ChipComponentView(icon: icon, text: value)
+                        }
+                    }
+                    .padding(.horizontal, Sizing.md)
                 }
-                .padding(.horizontal, Sizing.md)
+                
                 
                 RouletteComponentView(controller: rouletteController)
                     .onTapGesture {
