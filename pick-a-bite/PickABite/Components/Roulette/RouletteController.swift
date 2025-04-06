@@ -12,7 +12,7 @@ class RouletteController: ObservableObject {
     @Published var rotation: Double = 0
     @Published var selectedSegment: SegmentData
     @Published var isSelected: Bool = false
-    @Published var countChange: Int = 3
+    @Published var countChances: Int = 0
     @Published var havingChance: Bool = true
     
     var isSpinning: Bool = false
@@ -33,8 +33,8 @@ class RouletteController: ObservableObject {
     }
     
     func spin() {
-        guard countChange != 0 else {
-            Logger.error("Count is zero: \(countChange)")
+        guard countChances != 3 else {
+            Logger.error("Count is limited: \(countChances)")
             havingChance = false
             return
         }
@@ -53,20 +53,16 @@ class RouletteController: ObservableObject {
             this.isSpinning = false
             let incompleteRotation = (Int(this.rotation) + 90) % 360
             let restOfRotation: Double = Double(incompleteRotation) / (360.0 / Double(this.segmentData.count))
-            let restOfRotationInteger = Int(restOfRotation)
+            _ = Int(restOfRotation)
             let winningIndex = Int(round(restOfRotation))
             let selected = this.segmentData.reversed()
             
             let winnerIndex = selected.index(selected.startIndex, offsetBy: this.constrain(winningIndex, min: 0, max: this.segmentData.count - 1))
             let winner = selected[winnerIndex]
-            Logger.log("rotation: \(this.rotation) incompleteRotation: \(incompleteRotation) totalRotation: \(this.totalRotation)")
-            Logger.log("restOfRotation: \(restOfRotation) restOfRotationInteger: \(restOfRotationInteger) winningIndexModulo: \(restOfRotationInteger % this.segmentData.count)")
-            Logger.log("winningIndex: \(winningIndex) winnerIndex: \(winnerIndex)")
-            Logger.log(winner.description)
-            Logger.log("-------------------------")
+        
             this.selectedSegment = winner
             this.isSelected = true
-            this.countChange -= 1
+            this.countChances += 1
         }
     }
     
