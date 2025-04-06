@@ -7,8 +7,13 @@
 
 import SwiftUI
 
-class RoulettePageService: ObservableObject {
+class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.EntityModel == UserHistoryModel {
     let service: MainPredictService = MainPredictService()
+    let userHistoryRepo: R
+    
+    init(repository: R) {
+        self.userHistoryRepo = repository
+    }
     
     func predictAsSegmentData() -> [SegmentData] {
         let jsonDict: [String: Any] = [
@@ -22,8 +27,6 @@ class RoulettePageService: ObservableObject {
         let _predicts = service.predict(
             preferences: preferences
         )
-        
-//        Logger.log(dictionary: _predicts)
         
         return _predicts
             .sorted(by: { $0.value > $1.value })

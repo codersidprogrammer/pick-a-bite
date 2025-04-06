@@ -10,8 +10,7 @@ import SwiftUI
 
 struct RoulettePageView: View {
     
-    @State var presented: Bool = true
-    @StateObject var service: RoulettePageService = .init()
+    @EnvironmentObject var service: RoulettePageService<MockUserHistoryRepository> // TODO: Change this to real repo
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     
     var whenNotHavingChance: Binding<Bool> {
@@ -54,10 +53,28 @@ struct RoulettePageView: View {
                             selectedSegment: $rouletteController.selectedSegment,
                             rouletteController: .constant(rouletteController)
                         )
-                            .presentationDetents([.medium, .large])
-                            .presentationDragIndicator(.visible)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
+                        .onAppear(){
+                            do {
+                                try service.userHistoryRepo.add(
+                                    UserHistoryModel(
+                                        tenantName: rouletteController.selectedSegment.description,
+                                        
+                                        // TODO: Change this into real selected preferences
+                                        criteria: dummyChip.map{
+                                            key, value in
+                                            return value
+                                        },
+                                        spinSequence: rouletteController.countChances
+                                    )
+                                )
+                            } catch let error {
+                                Logger.error(error.localizedDescription)
+                            }
+                        }
                     }
-                    .alert("Unlucky!", isPresented: whenNotHavingChance) {
+                    .alert("Oops!", isPresented: whenNotHavingChance) {
                         
                     } message: {
                         Text("Unfortunatelly! you have no any chances now")
@@ -76,5 +93,10 @@ struct RoulettePageView: View {
 }
 
 #Preview {
+    let mockRepo = MockUserHistoryRepository()
+    let service = RoulettePageService(repository: mockRepo)
+    
     RoulettePageView()
+        .environmentObject(service)
+        .environment(\.modelContext, RepositoryInitializer.instance.modelContainer.mainContext)
 }
