@@ -8,56 +8,46 @@
 import Foundation
 import SwiftData
 
-final class TenantRepository: TenantRepositoryProtocol {
-
+final class TenantRepository: RepositoryProtocol {
+    typealias EntityModel = TenantModel
+    
     private let context: ModelContext
 
     init(context: ModelContext) {
         self.context = context
     }
 
-    func fetchAllTenants() throws -> [TenantModel] {
+    func fetchAll() throws -> [TenantModel] {
         let descriptor = FetchDescriptor<TenantModel>()
         return try context.fetch(descriptor)
     }
 
-    func getTenant(byId id: UUID) throws -> TenantModel? {
+    func get(byId id: UUID) throws -> TenantModel? {
         let descriptor = FetchDescriptor<TenantModel>(
             predicate: #Predicate { $0.id == id }
         )
         return try context.fetch(descriptor).first
     }
 
-    func addTenant(_ tenant: TenantModel) {
-        do {
-            context.insert(tenant)
-            try context.save()
-        } catch {
-            Logger.error("❌ Failed to add tenant: \(error.localizedDescription)")
-        }
+    func add(_ tenant: TenantModel) throws {
+        context.insert(tenant)
+        try context.save()
     }
 
-    func updateTenant(_ tenant: TenantModel) {
-        do {
-            try context.save()
-        } catch {
-            Logger.error("❌ Failed to update tenant: \(error.localizedDescription)")
-        }
+    func update(_ tenant: TenantModel) throws {
+        try context.save()
     }
 
-    func deleteTenant(_ tenant: TenantModel) {
-        do {
-            context.delete(tenant)
-            try context.save()
-        } catch {
-            Logger.error("❌ Failed to delete tenant: \(error.localizedDescription)")
-        }
+    func delete(_ tenant: TenantModel) throws {
+        context.delete(tenant)
+        try context.save()
     }
 
-    func findTenant(byName name: String) throws -> TenantModel? {
+    func find(byName name: String) throws -> TenantModel? {
         let descriptor = FetchDescriptor<TenantModel>(
             predicate: #Predicate { $0.name == name }
         )
         return try context.fetch(descriptor).first
     }
 }
+
