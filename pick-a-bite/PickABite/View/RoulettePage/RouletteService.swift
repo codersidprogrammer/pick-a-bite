@@ -18,7 +18,7 @@ class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.Entit
     func predictAsSegmentData() -> [SegmentData] {
         let jsonDict: [String: Any] = [
                         "Coffee_Tea": 1,
-//            "Seafood": 1,
+            "Seafood": 1,
 //                        "Juice_Beverages": 1,
 //                        "Meat_Protein": 1
         ]
@@ -31,6 +31,7 @@ class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.Entit
         return _predicts
             .sorted(by: { $0.value > $1.value })
             .prefix(10)
+            .shuffled()
             .enumerated()
             .map { index, elements in
                 let (key, value) = elements

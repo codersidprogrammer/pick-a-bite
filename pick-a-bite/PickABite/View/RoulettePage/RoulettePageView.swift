@@ -12,6 +12,7 @@ struct RoulettePageView: View {
     
     @EnvironmentObject var service: RoulettePageService<MockUserHistoryRepository> // TODO: Change this to real repo
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
+    @State var whenSpinInfoTap: Bool = false
     
     var whenNotHavingChance: Binding<Bool> {
         Binding(
@@ -86,6 +87,21 @@ struct RoulettePageView: View {
                         rouletteController.spin()
                     }
                 Spacer()
+                SimpleCardComponentView(
+                    title: "Spin count \(rouletteController.countChances)x",
+                    subtitle: "Tap me for detail",
+                    iconName: "info.circle.fill",
+                    iconColor: .primary
+                )
+                .padding(.all, Sizing.md)
+                .onTapGesture {
+                    whenSpinInfoTap.toggle()
+                }
+                .alert("Info", isPresented: $whenSpinInfoTap) {
+                    
+                } message: {
+                    Text("Every day you only have 3 chances to spin, so make sure to use them wisely! Good luck!")
+                }
             }
         }
         

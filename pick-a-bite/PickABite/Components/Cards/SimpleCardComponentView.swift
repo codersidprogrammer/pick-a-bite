@@ -10,17 +10,21 @@ import SwiftUI
 struct SimpleCardComponentView: View {
     var title: String
     var subtitle: String
+    var iconName: String
+    var iconColor: Color
     
-    init(title: String, subtitle: String) {
+    init(title: String, subtitle: String, iconName: String = "chevron.forward.circle.fill", iconColor: Color = .secondary) {
         self.title = title
         self.subtitle = subtitle
+        self.iconName = iconName
+        self.iconColor = iconColor
     }
     
     var body: some View {
         HStack(alignment: .center) {
-            Image(systemName: "chevron.forward.circle.fill")
+            Image(systemName: iconName)
                 .font(.title)
-                .foregroundColor(.secondary)
+                .foregroundColor(iconColor)
             
             VStack(alignment: .leading) {
                 Text(title)

@@ -42,6 +42,7 @@ class RouletteController: ObservableObject {
         
         isSpinning = true
         isSelected = false
+        self.countChances += 1
         
         withAnimation(Animation.timingCurve(0.1, 0.8, 0.3, 1.0, duration: totalSpinDuration)) {
             rotation += totalRotation
@@ -62,7 +63,6 @@ class RouletteController: ObservableObject {
         
             this.selectedSegment = winner
             this.isSelected = true
-            this.countChances += 1
         }
     }
     

@@ -35,9 +35,11 @@ struct HalfSheetView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Sizing.xs) {
                     let segmentData = Array(rouletteController.segmentData.enumerated())
+                    
+                    
                     if segmentData.count > 1 {
-                        let end = min(2, segmentData.count - 1)
-                        ForEach(segmentData[1...end], id: \.offset) { index, segment in
+                        let takeTwo = segmentData.shuffled().prefix(2)
+                        ForEach(takeTwo, id: \.offset) { index, segment in
                             SimpleCardComponentView(
                                 title: segment.description,
                                 subtitle: "Nice to try"
@@ -74,6 +76,7 @@ struct HalfSheetView: View {
         SegmentData(index: 0.2, color: Color.primary, description: "Starbucks"),
         SegmentData(index: 0.1, color: Color.primary, description: "Kopi Kenangan"),
         SegmentData(index: 0.05, color: Color.primary, description: "Janji Jiwa"),
+        SegmentData(index: 0.3, color: Color.primary, description: "Tomoro Coffee"),
     ]
     
     HalfSheetView(
