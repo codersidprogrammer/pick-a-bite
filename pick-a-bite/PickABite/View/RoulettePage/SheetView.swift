@@ -28,15 +28,38 @@ struct HalfSheetView: View {
             .padding(.horizontal, Sizing.sm)
             
             Spacer()
+            Text("Maybe you'll like")
+                .font(.headline)
+                .padding(.leading, Sizing.md)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Sizing.xs) {
+                    let segmentData = Array(rouletteController.segmentData.enumerated())
+                    if segmentData.count > 1 {
+                        let end = min(2, segmentData.count - 1)
+                        ForEach(segmentData[1...end], id: \.offset) { index, segment in
+                            SimpleCardComponentView(
+                                title: segment.description,
+                                subtitle: "Nice to try"
+                            )
+                            .onTapGesture {
+                                // TODO: change to actual action
+                                Logger.log("You choose \(segment.description)")
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, Sizing.md)
+            }
+            .padding(.bottom, Sizing.xl)
+            
             Text("Want try more?")
                 .font(.headline)
                 .padding(.leading, Sizing.md)
             
-            
             PrimaryButtonComponentView(
-                "Spin more (\(rouletteController.countChange)x)",
+                "Spin more (\(rouletteController.countChances)x)",
                 action: {
-                    Logger.log("Came from component view")
                     rouletteController.isSelected.toggle()
                     rouletteController.spin()
                 },
@@ -44,4 +67,17 @@ struct HalfSheetView: View {
             )
         }
     }
+}
+
+#Preview {
+    @Previewable @State var segmentData: [SegmentData] = [
+        SegmentData(index: 0.2, color: Color.primary, description: "Starbucks"),
+        SegmentData(index: 0.1, color: Color.primary, description: "Kopi Kenangan"),
+        SegmentData(index: 0.05, color: Color.primary, description: "Janji Jiwa"),
+    ]
+    
+    HalfSheetView(
+        selectedSegment: .constant(segmentData[0]),
+        rouletteController: .constant(RouletteController(segmentData: segmentData))
+    )
 }
