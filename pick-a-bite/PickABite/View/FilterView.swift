@@ -8,25 +8,28 @@
 import SwiftUI
 
 struct FilterView: View {
-    @State private var isClicked = false
-    //    let foodCategoriesJson: PreferenceDto = PreferenceDto.fromJson([:]) ??
-    var foodCategoriesData: [FoodCategory] {
-        let mirror = Mirror(reflecting: PreferenceDto())
-
-        return mirror.children
-            .compactMap {
-                if $0.label != nil {
-                    let label = $0.label!.replacingOccurrences(
-                        of: "_", with: " ")
-
-                    return FoodCategory(
-                        name: label
-                    )
-                }
-
-                return nil
-            }
-    }
+    var foodCategoriesData: [FoodCategory] = [
+        FoodCategory(key: "Coffee_Tea", name: "☕ Coffe Tea"),
+        FoodCategory(key: "Sweet_Desserts", name: "🍰 Sweet Desserts"),
+        FoodCategory(key: "Juice_Beverages", name: "🥤 Juice Beverages"),
+        FoodCategory(key: "Healthy_Vegan", name: "🥗 Healthy Vegan"),
+        FoodCategory(key: "Meat_Protein", name: "🥩 Meat Protein"),
+        FoodCategory(key: "Seafood", name: "🦐 Seafood"),
+        FoodCategory(key: "Spicy_Flavors", name: "🌶️ Spicy Flavorts"),
+        FoodCategory(key: "Comfort_Food", name: "🍪 Comfort Food"),
+        FoodCategory(key: "Noodles_Rice", name: "🍜 Noodles Rice"),
+        FoodCategory(key: "Bakery_Bread", name: "🥖 Bakery Bread"),
+        FoodCategory(key: "Hangout_Ambience", name: "🎨 Hangout Ambience"),
+        FoodCategory(key: "Alcohol_Bar", name: "🍷 Alcohol Bar"),
+        FoodCategory(key: "Snacks_Appetizers", name: "🍟 Snacks Appetizers"),
+        FoodCategory(key: "Lunch_Meal", name: "🍱 Lunch Meal"),
+        FoodCategory(key: "Soups_Broths", name: "🍲 Soups Broths"),
+        FoodCategory(key: "Japanese_Cuisine", name: "🇯🇵 Japanese Cuisine"),
+        FoodCategory(key: "Indonesian_Cuisine", name: "🇮🇩 Indonesian Cuisine"),
+        FoodCategory(key: "Fast_Food", name: "🍔 Fast Food"),
+        FoodCategory(key: "Refreshing_Fresh", name: "🥝 Refreshing Fresh"),
+        FoodCategory(key: "Dining_Experience", name: "🍽️ Dining Experience"),
+    ]
     @State var selectedName: Set<String> = []
     @State private var dragLocation: CGPoint = .zero
     @State private var buttonFrames: [String: CGRect] = [:]
@@ -114,32 +117,9 @@ struct FilterView: View {
                         .padding(.horizontal, -36)
                         .frame(height: 64)
                 }
-                .sensoryFeedback(
-                    .impact(weight: .light),
-                    trigger: isClicked
-                )
                 .frame(height: 64)
                 .buttonStyle(.borderedProminent)
                 .cornerRadius(28)
-
-                //            Button (action: {
-                //                isClicked.toggle()
-                //            }) {
-                //                Label("Spin the weel", systemImage: "chart.pie.fill")
-                //                    .font(.headline)
-                //                    .foregroundColor(.white)
-                //                    .containerRelativeFrame(.horizontal)
-                //                    .padding(.horizontal, -36)
-                //                    .frame(height: 64)
-                //            }
-                //            .sensoryFeedback(
-                //                .impact(weight: .light),
-                //                trigger: isClicked
-                //            )
-                //            .symbolEffect(.wiggle.clockwise, value: isClicked ? 1 : 0)
-                //            .frame(height: 64)
-                //            .buttonStyle(.borderedProminent)
-                //            .cornerRadius(28)
             }
             .gesture(drag)
             .background(Color.gray.opacity(0.2))
