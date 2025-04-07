@@ -1,0 +1,172 @@
+//
+//  RoulettePageView.swift
+//  PickABite
+//
+//  Created by Dimaseditiya on 26/03/25.
+//
+
+import SwiftUI
+
+// MARK: - Move to another file
+struct Sector: Equatable {
+    let index: Double
+    let color: Color
+    let description: String
+}
+
+// MARK: - Move to another file
+extension Color {
+    static func random() -> Color {
+        return Color(
+            red: Double.random(in: 0...1),
+            green: Double.random(in: 0...1),
+            blue: Double.random(in: 0...1)
+        )
+    }
+}
+
+// MARK: - Move to another file
+class RouletteModel: ObservableObject {
+    let service: MainPredictService = MainPredictService()
+    @Published var sectors: [Sector] = []
+    
+    init(preference: PreferenceDto) {
+        sectors = service.predict(preferences: preference).map{
+            key, value in
+            return Sector(index: value, color: .random(), description: key)
+        }
+    }
+}
+
+// MARK: - Move to another file
+struct SectionShape: Shape {
+    var startAngle: Double
+    var endAngle: Double
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = rect.width / 2
+        
+        path.move(to: center)
+        path.addArc(center: center,
+                    radius: radius,
+                    startAngle: .degrees(startAngle),
+                    endAngle: .degrees(endAngle),
+                    clockwise: false)
+        path.closeSubpath()
+        
+        return path
+    }
+}
+
+struct RoulettePageView: View {
+    
+    @StateObject var rouletterModel: RouletteModel = .init(preference: .init())
+    @State private var isAnimating = false
+    @State private var spinDegrees = 0.0
+    @State private var rand = 0.0
+    @State private var newAngle = 0.0
+    let halfSector = 360.0 / 37.0 / 2.0
+    private let numbers = Array(0...20) // Standard roulette numbers
+    
+    var spinAnimation: Animation {
+        Animation
+            .easeOut(duration: 3.0)
+            .repeatCount(1, autoreverses: false)
+    }
+    
+    func getAngle(angle: Double) -> Double {
+        let deg = 360 - angle.truncatingRemainder(dividingBy: 360)
+        return deg
+    }
+    
+    func sectorFromAngle(angle: Double) -> String {
+        var i = 0
+        var sector: Sector = Sector(index: -1, color: .black, description: "")
+        
+        while sector == Sector(index: -1, color: .black, description: "") && i < rouletterModel.sectors.count {
+            let start: Double = halfSector * Double((i*2 + 1)) - halfSector
+            let end: Double = halfSector * Double((i*2 + 3))
+            
+            if(angle >= start && angle < end) {
+                sector = rouletterModel.sectors[i]
+            }
+            i+=1
+        }
+        return "Sector\n\(sector.index) \(sector.color.hashValue)"
+    }
+    
+    
+    var body: some View {
+        Text(rouletterModel.sectors[3].description)
+        VStack {
+            ZStack {
+                // Rotating sections
+                ForEach(0..<numbers.count, id: \.self) { i in
+                    let angle = Double(i) * (360.0 / Double(numbers.count))
+                    let sectionColor = Color(hue: Double(i) / Double(numbers.count), saturation: 0.8, brightness: 0.9)
+                    
+                    SectionShape(startAngle: angle, endAngle: angle + (360.0 / Double(numbers.count)))
+                        .fill(sectionColor)
+                        .frame(width: 250, height: 250)
+                }
+                .rotationEffect(Angle(degrees: spinDegrees)) // Ensure sections rotate
+                
+                // Draw circle border
+                Circle()
+                    .strokeBorder(Color.black, lineWidth: 5)
+                    .frame(width: 300, height: 300)
+                
+                // Rotating numbers
+                ForEach(0..<numbers.count, id: \.self) { i in
+                    let angle = Double(i) * (360.0 / Double(numbers.count))
+                    
+                    Text("\(numbers[i])")
+                        .rotationEffect(.degrees(-angle)) // Counter-rotate text
+                        .offset(y: -100)
+                        .rotationEffect(.degrees(angle)) // Position at angle
+                }
+                .rotationEffect(Angle(degrees: spinDegrees)) // Ensure numbers rotate
+            }
+            .frame(width: 250, height: 250)
+            .animation(.easeOut(duration: 3), value: spinDegrees)
+            
+            Button("Spin") {
+                spinDegrees += 360 * 3 // Spin 3 full rounds
+            }
+            .padding()
+            
+            Text(self.isAnimating ? "Spining\n..." : sectorFromAngle(angle : newAngle))
+                .multilineTextAlignment(.center)
+            
+            Image("arrow")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            
+            Image("roulette")
+                .resizable()
+                .scaledToFit()
+                .rotationEffect(Angle(degrees: spinDegrees))
+                .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .animation(spinAnimation, value: spinDegrees)
+            
+            Button("SPIN") {
+                isAnimating = true
+                rand = Double.random(in: 1...360)
+                spinDegrees += 720.0 + rand
+                newAngle = getAngle(angle: spinDegrees)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.9) {
+                    isAnimating = false
+                }
+            }
+            .padding(40)
+            .disabled(isAnimating == true)
+        }
+    }
+}
+
+#Preview {
+    RoulettePageView()
+}
