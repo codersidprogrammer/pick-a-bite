@@ -1,61 +1,48 @@
+////
+////  ContentView.swift
+////  PickABite
+////
+////  Created by Abimanyu Damarjati on 25/03/25.
+////
 //
-//  ContentView.swift
-//  PickABite
-//
-//  Created by Abimanyu Damarjati on 25/03/25.
-//
-
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    private let now = Date.now
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack {
+            FilterView()
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text(
+                                    now,
+                                    format: .dateTime.day().month(.wide).year()
+                                )
+                                .font(.caption)
+                                .textCase(.uppercase)
+                                .foregroundStyle(.secondary)
+                                Text(now, format: .dateTime.weekday(.wide))
+                                    .font(.headline).textCase(.uppercase)
+                            }
+                            Spacer()
+                            Button {
+                                        
+                            } label: {
+                                Image(
+                                    systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90"
+                                )
+                            }
+                        }.padding()
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
