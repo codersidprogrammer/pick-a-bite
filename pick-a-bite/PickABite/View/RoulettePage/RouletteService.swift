@@ -9,7 +9,7 @@ import SwiftUI
 
 class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.EntityModel == UserHistoryModel {
     let service: MainPredictService = MainPredictService()
-    let userHistoryRepo: R
+    var userHistoryRepo: R
     
     init(repository: R) {
         self.userHistoryRepo = repository

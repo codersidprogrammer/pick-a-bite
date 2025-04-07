@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 
 struct RoulettePageView: View {
     
-    @EnvironmentObject var service: RoulettePageService<MockUserHistoryRepository> // TODO: Change this to real repo
+    @EnvironmentObject var service: RoulettePageService<UserHistoryRepository> // TODO: Change this to real repo
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     @State var whenSpinInfoTap: Bool = false
     
@@ -21,11 +22,18 @@ struct RoulettePageView: View {
         )
     }
     
-    let dummyChip: [String:String] = [
-        "flame.fill": "Spicy",
-        "cup.and.heat.waves.fill": "Coffee",
-        "person.crop.circle.fill": "Cozy"
-    ]
+    let preferences: [String:String]
+    
+    init() {
+        self.preferences = [
+            "flame.fill": "🌶️ Spicy",
+            "cup.and.heat.waves.fill": "☕️ Coffee",
+            "person.crop.circle.fill": "😌 Cozy"
+        ]
+    }
+    init(preferences: [String:String]) {
+        self.preferences = preferences
+    }
     
     var body: some View {
         NavigationView {
@@ -38,8 +46,8 @@ struct RoulettePageView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Sizing.xs) {
-                        ForEach(Array(dummyChip), id: \.key) { icon, value in
-                            ChipComponentView(icon: icon, text: value)
+                        ForEach(Array(preferences), id: \.key) { icon, value in
+                            ChipOutlinedComponentView(value)
                         }
                     }
                     .padding(.horizontal, Sizing.md)
@@ -63,7 +71,7 @@ struct RoulettePageView: View {
                                         tenantName: rouletteController.selectedSegment.description,
                                         
                                         // TODO: Change this into real selected preferences
-                                        criteria: dummyChip.map{
+                                        criteria: preferences.map{
                                             key, value in
                                             return value
                                         },
@@ -109,10 +117,29 @@ struct RoulettePageView: View {
 }
 
 #Preview {
-    let mockRepo = MockUserHistoryRepository()
-    let service = RoulettePageService(repository: mockRepo)
+    @Previewable @State var isInitialized: Bool = false
+    var service: RoulettePageService<UserHistoryRepository> = {
+        // NOTE: Dummy init with a temporary context (won't be used)
+        let dummyContext = try! ModelContainer(for: UserHistoryModel.self).mainContext
+        let dummyRepo = UserHistoryRepository(context: dummyContext)
+        return RoulettePageService(repository: dummyRepo)
+    }()
+    
     
     RoulettePageView()
         .environmentObject(service)
         .environment(\.modelContext, RepositoryInitializer.instance.modelContainer.mainContext)
+        .onAppear {
+            if !isInitialized {
+                service.userHistoryRepo = UserHistoryRepository(context: RepositoryInitializer.instance.modelContainer.mainContext)
+                isInitialized = true
+            }
+        }
+    
+    Button("Show Log") {
+        let test = try! service.userHistoryRepo.fetchAll()
+        for t in test {
+            Logger.log(t.toJsonString() ?? "{}")
+        }
+    }
 }

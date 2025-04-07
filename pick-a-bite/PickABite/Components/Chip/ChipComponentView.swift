@@ -13,10 +13,10 @@ struct ChipComponentView: View {
     
     var body: some View {
         HStack{
-            Image(systemName: icon)
-                .resizable()
-                .frame(width: 20, height: 20)
-                .foregroundColor(.white)
+//            Image(systemName: icon)
+//                .resizable()
+//                .frame(width: 20, height: 20)
+//                .foregroundColor(.white)
             
             Text(text)
                 .font(.caption)
@@ -31,5 +31,5 @@ struct ChipComponentView: View {
 }
 
 #Preview {
-    ChipComponentView(icon: "person.crop.circle", text: "dimass")
+    ChipComponentView(icon: "person.crop.circle", text: "🌶️ dimass")
 }
