@@ -60,7 +60,7 @@ struct PreferenceDto: Codable {
             let jsonData = try JSONSerialization.data(withJSONObject: dictionary)
             return try JSONDecoder().decode(PreferenceDto.self, from: jsonData)
         } catch {
-            print("❌ JSON Parsing Error: \(error.localizedDescription)")
+            Logger.error("❌ JSON Parsing Error: \(error.localizedDescription)")
             return nil
         }
     }
@@ -89,4 +89,45 @@ extension PreferenceDto {
         self.Refreshing_Fresh = 0
         self.Dining_Experience = 0
     }
+    
+    func toJsonString() -> String {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            do {
+                let data = try encoder.encode(self)
+                return String(data: data, encoding: .utf8) ?? "{}"
+            } catch {
+                return "{}"
+            }
+        }
 }
+
+extension PreferenceDto: CustomStringConvertible {
+    var description: String {
+        return """
+        PreferenceDto(
+            Coffee_Tea: \(Coffee_Tea),
+            Sweet_Desserts: \(Sweet_Desserts),
+            Juice_Beverages: \(Juice_Beverages),
+            Healthy_Vegan: \(Healthy_Vegan),
+            Meat_Protein: \(Meat_Protein),
+            Seafood: \(Seafood),
+            Spicy_Flavors: \(Spicy_Flavors),
+            Comfort_Food: \(Comfort_Food),
+            Noodles_Rice: \(Noodles_Rice),
+            Bakery_Bread: \(Bakery_Bread),
+            Hangout_Ambience: \(Hangout_Ambience),
+            Alcohol_Bar: \(Alcohol_Bar),
+            Snacks_Appetizers: \(Snacks_Appetizers),
+            Lunch_Meal: \(Lunch_Meal),
+            Soups_Broths: \(Soups_Broths),
+            Japanese_Cuisine: \(Japanese_Cuisine),
+            Indonesian_Cuisine: \(Indonesian_Cuisine),
+            Fast_Food: \(Fast_Food),
+            Refreshing_Fresh: \(Refreshing_Fresh),
+            Dining_Experience: \(Dining_Experience)
+        )
+        """
+    }
+}
+

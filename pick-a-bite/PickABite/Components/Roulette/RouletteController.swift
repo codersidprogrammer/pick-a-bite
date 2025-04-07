@@ -1,0 +1,72 @@
+//
+//  RouletteController.swift
+//  PickABite
+//
+//  Created by Dimaseditiya on 03/04/25.
+//
+
+import SwiftUI
+
+class RouletteController: ObservableObject {
+    @Published var segmentData: [SegmentData] = []
+    @Published var rotation: Double = 0
+    @Published var selectedSegment: SegmentData
+    @Published var isSelected: Bool = false
+    @Published var countChances: Int = 0
+    @Published var havingChance: Bool = true
+    
+    var isSpinning: Bool = false
+    let totalSpinDuration: Double = 5.0
+    var totalRotation: Double = 3500
+    var names: [String] = [""]
+    var winningColor: [String] = [""]
+    var winningValue: String = ""
+    
+    init(segmentData: [SegmentData]) {
+        self.segmentData = segmentData
+        self.selectedSegment = SegmentData(index: 0, color: Color.white, description: "")
+    }
+    
+    func setSegment(data: [SegmentData]) {
+        segmentData.removeAll()
+        segmentData = data
+    }
+    
+    func spin() {
+        guard countChances != 3 else {
+            Logger.error("Count is limited: \(countChances)")
+            havingChance = false
+            return
+        }
+        guard !isSpinning else { return }
+        
+        isSpinning = true
+        isSelected = false
+        self.countChances += 1
+        
+        withAnimation(Animation.timingCurve(0.1, 0.8, 0.3, 1.0, duration: totalSpinDuration)) {
+            rotation += totalRotation
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + totalSpinDuration) { [weak self] in
+            guard let this = self else { return }
+            
+            this.isSpinning = false
+            let incompleteRotation = (Int(this.rotation) + 90) % 360
+            let restOfRotation: Double = Double(incompleteRotation) / (360.0 / Double(this.segmentData.count))
+            _ = Int(restOfRotation)
+            let winningIndex = Int(round(restOfRotation))
+            let selected = this.segmentData.reversed()
+            
+            let winnerIndex = selected.index(selected.startIndex, offsetBy: this.constrain(winningIndex, min: 0, max: this.segmentData.count - 1))
+            let winner = selected[winnerIndex]
+        
+            this.selectedSegment = winner
+            this.isSelected = true
+        }
+    }
+    
+    func constrain(_ value: Int, min: Int, max: Int) -> Int {
+        return value < min ? min : value > max ? max : value
+    }
+}

@@ -73,50 +73,54 @@ struct RouletteView: View {
     var body: some View {
         VStack {
             GeometryReader { geometry in
-                ZStack {
-                    ForEach(0..<viewModel.segmentCount, id: \.self) { index in
-                        ZStack {
-                            Segment(
-                                startAngle: self.angleForSegment(index),
-                                endAngle: self.angleForSegment(index + 1))
-                            .foregroundStyle(viewModel.colors[index % viewModel.colors.count])
-                            .onAppear() {
-                                let midX  = geometry.frame(in: .local).midX + 40
-                                let midY = geometry.frame(in: .local).midY + 40
-                                
-                                radius = min(midX, midY)
-                            }
-                            Text(viewModel.names[index])
-                                .foregroundStyle(.white)
-                                .font(.headline)
-                                .rotationEffect(angleForSegment(index + 1) - Angle(degrees: 10))
-                                .offset(
-                                    CGSize(
-                                        width: { () -> Double in
-                                            let mean: Angle = (angleForSegment(index) + angleForSegment(index + 1)) / 2
-                                            return radius * 0.5 * cos(mean.radians)
-                                        }(),
-                                        height: { () -> Double in
-                                            let mean: Angle = (angleForSegment(index) + angleForSegment(index + 1)) / 2
-                                            
-                                            return radius * 0.5 * sin(mean.radians)
-                                        }()
-                                    )
+                    ZStack {
+                        ForEach(0..<viewModel.segmentCount, id: \.self) { index in
+                            ZStack {
+                                Segment(
+                                    startAngle: self.angleForSegment(index),
+                                    endAngle: self.angleForSegment(index + 1)
                                 )
+                                .foregroundStyle(viewModel.colors[index % viewModel.colors.count])
+                                .onAppear() {
+                                    let midX  = geometry.frame(in: .local).midX + 40
+                                    let midY = geometry.frame(in: .local).midY + 40
+                                    
+                                    radius = min(midX, midY)
+                                }
+                                Text(viewModel.names[index])
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                                    .rotationEffect(angleForSegment(index + 1) - Angle(degrees: 10))
+                                    .offset(
+                                        CGSize(
+                                            width: { () -> Double in
+                                                let mean: Angle = (angleForSegment(index) + angleForSegment(index + 1)) / 2
+                                                return radius * 0.5 * cos(mean.radians)
+                                            }(),
+                                            height: { () -> Double in
+                                                let mean: Angle = (angleForSegment(index) + angleForSegment(index + 1)) / 2
+                                                
+                                                return radius * 0.5 * sin(mean.radians)
+                                            }()
+                                        )
+                                    )
+                            }
+                            .frame(width: 300, height: 300)
+                            .rotationEffect(.degrees(viewModel.rotation))
                         }
-                        .frame(width: 300, height: 300)
-                        .rotationEffect(.degrees(viewModel.rotation))
+                        
+                        Circle()
+                            .foregroundStyle(.blue)
+                            .frame(width: 50, height: 50)
+                        
+                        Image("arrow")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 25, height: 25, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .rotationEffect(.degrees(90))
+                            .offset()
+                        
                     }
-                    Circle()
-                        .foregroundStyle(.white)
-                        .frame(width: 50, height: 50)
-                    //                    Arrow()
-                    //                        .foregroundStyle(.gray)
-                    //                        .frame(width: 30, height: 30, alignment: .center)
-                    //                        .rotationEffect(.degrees(180))
-                    //                        .offset()
-                    
-                }
                 .onTapGesture {
                     viewModel.spin()
                 }
