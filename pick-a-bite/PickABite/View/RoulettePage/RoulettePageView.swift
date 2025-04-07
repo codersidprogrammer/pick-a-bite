@@ -22,16 +22,16 @@ struct RoulettePageView: View {
         )
     }
     
-    let preferences: [String:String]
+    let preferences: [String]
     
     init() {
         self.preferences = [
-            "flame.fill": "🌶️ Spicy",
-            "cup.and.heat.waves.fill": "☕️ Coffee",
-            "person.crop.circle.fill": "😌 Cozy"
+            "🌶️ Spicy",
+            "☕️ Coffee",
+            "😌 Cozy"
         ]
     }
-    init(preferences: [String:String]) {
+    init(preferences: [String]) {
         self.preferences = preferences
     }
     
@@ -46,7 +46,7 @@ struct RoulettePageView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Sizing.xs) {
-                        ForEach(Array(preferences), id: \.key) { icon, value in
+                        ForEach(preferences, id: \.self) { value in
                             ChipOutlinedComponentView(value)
                         }
                     }
@@ -72,7 +72,7 @@ struct RoulettePageView: View {
                                         
                                         // TODO: Change this into real selected preferences
                                         criteria: preferences.map{
-                                            key, value in
+                                            value in
                                             return value
                                         },
                                         spinSequence: rouletteController.countChances

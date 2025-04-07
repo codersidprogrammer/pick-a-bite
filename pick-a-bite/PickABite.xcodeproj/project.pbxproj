@@ -29,33 +29,9 @@
 		AA61EFFF2D92AB4E009114F2 /* PickABiteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PickABiteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E9D01D422D9EE3CC002494B3 /* Exceptions for "PickABite" folder in "PickABite" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				View/RoulettePageView.txt,
-			);
-			target = AA61EFE22D92AB4D009114F2 /* PickABite */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		E9D01D432D9EE3CC002494B3 /* Exceptions for "PickABite" folder in "Compile Sources" phase from "PickABite" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = AA61EFDF2D92AB4D009114F2 /* Sources */;
-			membershipExceptions = (
-				View/RoulettePageView.txt,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AA61EFE52D92AB4D009114F2 /* PickABite */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E9D01D422D9EE3CC002494B3 /* Exceptions for "PickABite" folder in "PickABite" target */,
-				E9D01D432D9EE3CC002494B3 /* Exceptions for "PickABite" folder in "Compile Sources" phase from "PickABite" target */,
-			);
 			path = PickABite;
 			sourceTree = "<group>";
 		};
