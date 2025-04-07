@@ -12,11 +12,10 @@ struct FoodCategoryButtonStyle: ButtonStyle {
     
     
     func makeBody(configuration: Self.Configuration) -> some View {
-        //        print(isActive)
         return configuration.label
-            .padding(10)
+            .padding(EdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14))
             .foregroundColor(isActive ? .white : .black)
-            .background(isActive ? .blue : .white)
+//            .background(isActive ? .blue : .white)
             .background(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .fill(
