@@ -7,12 +7,14 @@
 
 import Foundation
 
-struct FoodCategory: Identifiable {
+struct FoodCategory: Identifiable, Hashable {
     var id: UUID
+    var key: String
     var name: String
     
-    init(id: UUID = UUID(), name: String) {
+    init(id: UUID = UUID(), key: String, name: String) {
         self.id = id
+        self.key = key
         self.name = name
     }
 }

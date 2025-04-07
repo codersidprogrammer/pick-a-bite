@@ -26,9 +26,9 @@ struct RoulettePageView: View {
     
     init() {
         self.preferences = [
-            "🌶️ Spicy",
-            "☕️ Coffee",
-            "😌 Cozy"
+            "Spicy",
+            "Coffee",
+            "Cozy"
         ]
     }
     init(preferences: [String]) {
@@ -89,7 +89,9 @@ struct RoulettePageView: View {
                         Text("Unfortunatelly! you have no any chances now")
                     }
                     .onAppear(){
-                        rouletteController.setSegment(data: service.predictAsSegmentData())
+                        rouletteController.setSegment(
+                            data: service.predictAsSegmentData(preffs: preferences)
+                        )
                     }
                     .onTapGesture {
                         rouletteController.spin()

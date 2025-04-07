@@ -25,6 +25,13 @@ struct MainView: View {
     
     private let now = Date.now
     
+    func normalizedKey(from name: String) -> String {
+        let components = name
+            .components(separatedBy: .whitespaces)
+            .filter { !$0.contains(where: { $0.isEmoji }) }
+        return components.joined(separator: "_")
+    }
+    
     var body: some View {
         NavigationStack(path: $path) {
             FilterView(path: $path) {
@@ -87,7 +94,10 @@ struct MainView: View {
             }
             // ✅ New way to trigger navigation
             .navigationDestination(isPresented: $isLinkActive) {
-                RoulettePageView(preferences: selectedPreferences)
+                RoulettePageView(preferences: selectedPreferences.map{
+                    value in
+                    return normalizedKey(from: value)
+                })
                     .environmentObject(rouletteService)
             }
             
