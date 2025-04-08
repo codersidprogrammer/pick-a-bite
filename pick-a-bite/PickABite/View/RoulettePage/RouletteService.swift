@@ -9,19 +9,15 @@ import SwiftUI
 
 class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.EntityModel == UserHistoryModel {
     let service: MainPredictService = MainPredictService()
-    let userHistoryRepo: R
+    var userHistoryRepo: R
     
     init(repository: R) {
         self.userHistoryRepo = repository
     }
     
-    func predictAsSegmentData() -> [SegmentData] {
-        let jsonDict: [String: Any] = [
-                        "Coffee_Tea": 1,
-            "Seafood": 1,
-//                        "Juice_Beverages": 1,
-//                        "Meat_Protein": 1
-        ]
+    func predictAsSegmentData(preffs: [String] = ["Coffee_Tea","Seafood"]) -> [SegmentData] {
+        let jsonDict = Dictionary(uniqueKeysWithValues: preffs.map { value in (value, 1) })
+        Logger.log(dictionary: jsonDict)
         
         let preferences = PreferenceDto.fromJson(jsonDict) ?? PreferenceDto()
         let _predicts = service.predict(

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FoodCategory: Identifiable {
+struct FoodCategory: Identifiable, Hashable {
     var id: UUID
     var key: String
     var name: String
