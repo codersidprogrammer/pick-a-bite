@@ -15,27 +15,30 @@ struct FilterView: View {
     @State private var isClicked = false
     //    let foodCategoriesJson: PreferenceDto = PreferenceDto.fromJson([:]) ??
     let foodCategoriesData: [FoodCategory] = [
-            FoodCategory(key: "Coffee_Tea", name: "☕ Coffe Tea"),
-            FoodCategory(key: "Sweet_Desserts", name: "🍰 Sweet Desserts"),
-            FoodCategory(key: "Juice_Beverages", name: "🥤 Juice Beverages"),
-            FoodCategory(key: "Healthy_Vegan", name: "🥗 Healthy Vegan"),
-            FoodCategory(key: "Meat_Protein", name: "🥩 Meat Protein"),
-            FoodCategory(key: "Seafood", name: "🦐 Seafood"),
-            FoodCategory(key: "Spicy_Flavors", name: "🌶️ Spicy Flavorts"),
-            FoodCategory(key: "Comfort_Food", name: "🍪 Comfort Food"),
-            FoodCategory(key: "Noodles_Rice", name: "🍜 Noodles Rice"),
-            FoodCategory(key: "Bakery_Bread", name: "🥖 Bakery Bread"),
-            FoodCategory(key: "Hangout_Ambience", name: "🎨 Hangout Ambience"),
-            FoodCategory(key: "Alcohol_Bar", name: "🍷 Alcohol Bar"),
-            FoodCategory(key: "Snacks_Appetizers", name: "🍟 Snacks Appetizers"),
-            FoodCategory(key: "Lunch_Meal", name: "🍱 Lunch Meal"),
-            FoodCategory(key: "Soups_Broths", name: "🍲 Soups Broths"),
-            FoodCategory(key: "Japanese_Cuisine", name: "🇯🇵 Japanese Cuisine"),
-            FoodCategory(key: "Indonesian_Cuisine", name: "🇮🇩 Indonesian Cuisine"),
-            FoodCategory(key: "Fast_Food", name: "🍔 Fast Food"),
-            FoodCategory(key: "Refreshing_Fresh", name: "🥝 Refreshing Fresh"),
-            FoodCategory(key: "Dining_Experience", name: "🍽️ Dining Experience"),
-        ]
+        FoodCategory(key: "Coffee_Tea", name: "☕ Coffe Tea"),
+        FoodCategory(key: "Sweet_Desserts", name: "🍰 Sweet Desserts"),
+        FoodCategory(key: "Juice_Beverages", name: "🥤 Juice Beverages"),
+        FoodCategory(key: "Healthy_Vegan", name: "🥗 Healthy Vegan"),
+        FoodCategory(key: "Meat_Protein", name: "🥩 Meat Protein"),
+        FoodCategory(key: "Seafood", name: "🦐 Seafood"),
+        FoodCategory(key: "Spicy_Flavors", name: "🌶️ Spicy Flavorts"),
+        FoodCategory(key: "Comfort_Food", name: "🍪 Comfort Food"),
+        FoodCategory(key: "Noodles_Rice", name: "🍜 Noodles Rice"),
+        FoodCategory(key: "Bakery_Bread", name: "🥖 Bakery Bread"),
+        FoodCategory(key: "Hangout_Ambience", name: "🎨 Hangout Ambience"),
+        FoodCategory(key: "Alcohol_Bar", name: "🍷 Alcohol Bar"),
+        FoodCategory(key: "Snacks_Appetizers", name: "🍟 Snacks Appetizers"),
+        FoodCategory(key: "Lunch_Meal", name: "🍱 Lunch Meal"),
+        FoodCategory(key: "Soups_Broths", name: "🍲 Soups Broths"),
+        FoodCategory(key: "Japanese_Cuisine", name: "🇯🇵 Japanese Cuisine"),
+        FoodCategory(
+            key: "Indonesian_Cuisine",
+            name: "🇮🇩 Indonesian Cuisine"
+        ),
+        FoodCategory(key: "Fast_Food", name: "🍔 Fast Food"),
+        FoodCategory(key: "Refreshing_Fresh", name: "🥝 Refreshing Fresh"),
+        FoodCategory(key: "Dining_Experience", name: "🍽️ Dining Experience"),
+    ]
 
     @State var selectedName: Set<String> = []
     @State private var dragLocation: CGPoint = .zero
@@ -51,31 +54,7 @@ struct FilterView: View {
         }
     }
     
-    @State private var isDragging = false
     var onSelectionChange: (Set<String>) -> Void
-    
-    
-    var drag: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                dragLocation = value.location
-                
-                for (name, frame) in buttonFrames {
-                    if frame.contains(dragLocation) {
-                        if clickedButtons.contains(name) { return }
-                        
-                        clickedButtons.insert(name)
-                        addCategory(name)
-                    }
-                }
-                
-                onSelectionChange(selectedName)
-            }.onEnded { _ in
-                clickedButtons.removeAll()
-                triggerHaptics.toggle()
-            }
-        
-    }
     
     var body: some View {
         VStack {
@@ -102,15 +81,13 @@ struct FilterView: View {
                                 isActive: selectedName.contains(item.name)
                             )
                         )
+                        .disabled(
+                            selectedName.count == 5 && !selectedName
+                                .contains(item.name)
+                        )
                         .sensoryFeedback(
                             .impact(weight: .light),
                             trigger: triggerHaptics
-                        )
-                        .background(
-                            TrackFrameView(
-                                name: item.name,
-                                buttonFrames: $buttonFrames
-                            )
                         )
                     }
                 }
@@ -119,35 +96,18 @@ struct FilterView: View {
             }
             .padding()
         }
-        .gesture(drag)
-        .background(Color.gray.opacity(0.2))
     }
     
-}
-
-struct TrackFrameView: View {
-    let name: String
-    @Binding var buttonFrames: [String: CGRect]
-    
-    var body: some View {
-        GeometryReader { geo in
-            Color.clear
-                .onAppear {
-                    DispatchQueue.main.async {
-                        buttonFrames[name] = CGRect(
-                            x: geo.frame(in: .global).minX,
-                            y: geo.frame(in: .global).minY - 80,
-                            width: geo.frame(in: .global).width,
-                            height: geo.frame(in: .global).height)
-                    }
-                }
-        }
-    }
 }
 
 extension Character {
     var isEmoji: Bool {
-        return unicodeScalars.contains { $0.properties.isEmoji && ($0.value > 0x238C || $0.properties.isEmojiPresentation) }
+        return unicodeScalars
+            .contains {
+                $0.properties.isEmoji && (
+                    $0.value > 0x238C || $0.properties.isEmojiPresentation
+                )
+            }
     }
 }
 
@@ -157,7 +117,7 @@ extension Character {
     FilterView(path: $path, onSelectionChange: {
         preferences in
         for p in preferences {
-            Logger.log(p)
+//            Logger.log(p)
         }
     })
 }

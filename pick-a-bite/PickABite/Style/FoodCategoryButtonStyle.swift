@@ -9,24 +9,21 @@ import SwiftUI
 
 struct FoodCategoryButtonStyle: ButtonStyle {
     var isActive: Bool = false
-    
+    @Environment(\.isEnabled) var isEnabled
     
     func makeBody(configuration: Self.Configuration) -> some View {
         return configuration.label
             .padding(EdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14))
-            .foregroundColor(isActive ? .white : .black)
-//            .background(isActive ? .blue : .white)
+            .foregroundColor(isActive ? .white : .kombuGreen)
             .background(
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .fill(
                         .shadow(
                             .inner(
                                 color: isActive ? Color(
-                                    red: 0/255,
-                                    green: 64/255,
-                                    blue: 221/255
-                                ) : Color("ButtonDefaultLightShadow"
-                                ),
+                                                            "ButtonDefaultActiveDarkShadow"
+                                                         ) : Color("ButtonDefaultLightShadow"
+                                                                  ),
                                 radius: 2,
                                 x: 3,
                                 y: 3
@@ -35,9 +32,7 @@ struct FoodCategoryButtonStyle: ButtonStyle {
                         .shadow(
                             .inner(
                                 color: isActive ? Color(
-                                    red: 64/255,
-                                    green: 156/255,
-                                    blue: 221/255
+                                    "ButtonDefaultActiveLightShadow"
                                 ) : Color(
                                     "ButtonDefaultDarkShadow"
                                 ),
@@ -48,13 +43,14 @@ struct FoodCategoryButtonStyle: ButtonStyle {
                         )
                     )
                     .foregroundColor(
-                        isActive ? .blue : Color("ButtonForeground")
+                        isActive ? .vividTangelo : Color(
+                            "CosmicLatte"
+                        )
                     )
             )
             .animation(.easeInOut(duration: 0.05), value: isActive)
             .cornerRadius(18)
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .scaleEffect(isActive ? 1.05 : 1)
             .animation(
                 .easeInOut(duration: 0.05),
                 value: configuration.isPressed
@@ -72,5 +68,7 @@ struct FoodCategoryButtonStyle: ButtonStyle {
     }) {
         Text("Hello World!")
     }
-    .buttonStyle(FoodCategoryButtonStyle(isActive: isActive))
+    .buttonStyle(FoodCategoryButtonStyle(
+        isActive: isActive
+    ))
 }
