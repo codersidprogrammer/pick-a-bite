@@ -36,6 +36,7 @@ struct FilterView: View {
             FoodCategory(key: "Refreshing_Fresh", name: "🥝 Refreshing Fresh"),
             FoodCategory(key: "Dining_Experience", name: "🍽️ Dining Experience"),
         ]
+
     @State var selectedName: Set<String> = []
     @State private var dragLocation: CGPoint = .zero
     @State private var buttonFrames: [String: CGRect] = [:]
@@ -115,7 +116,6 @@ struct FilterView: View {
                 }
                 .padding()
                 .contentShape(Rectangle())
-                
             }
             .padding()
         }
