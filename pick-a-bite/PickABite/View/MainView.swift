@@ -108,15 +108,6 @@ struct MainView: View {
                 isInitialized = true
             }
         }
-        
-        
-        //
-        //        Button("Show Log") {
-        //            let test = try! rouletteService.userHistoryRepo.fetchAll()
-        //            for t in test {
-        //                Logger.log(t.toJsonString() ?? "{}")
-        //            }
-        //        }
     }
 }
 
