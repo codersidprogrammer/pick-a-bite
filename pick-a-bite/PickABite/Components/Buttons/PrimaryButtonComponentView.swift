@@ -12,11 +12,13 @@ struct PrimaryButtonComponentView: View {
     var text: String = ""
     var action: () -> Void
     var isDisabled: Bool
+    var iconName: String
     
-    init(_ text: String, action: @escaping () -> Void, isDisabled: Bool = false) {
+    init(_ text: String, action: @escaping () -> Void, isDisabled: Bool = false, iconName: String = "") {
         self.text = text
         self.action = action
         self.isDisabled = isDisabled
+        self.iconName = iconName
     }
     
     var body: some View {
@@ -25,11 +27,15 @@ struct PrimaryButtonComponentView: View {
                 action()
             },
             label: {
-                Text(text)
-                    .primaryTextButton(isDisabled: isDisabled)
+                Label(text, systemImage: iconName)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(height: Sizing.xl2)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.kombuGreen)
+                    .cornerRadius(Sizing.lg2)
             }
         )
-        .disabled(isDisabled)
     }
 }
 

@@ -11,8 +11,10 @@ struct Sizing {
     static let sm: CGFloat = 8    // Tailwind `p-2`
     static let md: CGFloat = 16   // Tailwind `p-4`
     static let lg: CGFloat = 24   // Tailwind `p-6`
-    static let xl: CGFloat = 32   // Tailwind `p-8`
-    static let xxl: CGFloat = 48  // Tailwind `p-12`
+    static let lg2: CGFloat = 28
+    static let lg3: CGFloat = 32   // Tailwind `p-8`
+    static let xl: CGFloat = 48  // Tailwind `p-12`
+    static let xl2: CGFloat = 64
     static let xl3: CGFloat = 96
     static let xl4: CGFloat = 192
 }

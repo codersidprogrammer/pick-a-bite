@@ -10,12 +10,29 @@ import SwiftUI
 import Foundation
 
 struct MainView: View {
+    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var rouletteService:
+    RoulettePageService<UserHistoryRepository> = {
+        // NOTE: Dummy init with a temporary context (won't be used)
+        let dummyContext = try! ModelContainer(
+            for: UserHistoryModel.self
+        ).mainContext
+        let dummyRepo = UserHistoryRepository(context: dummyContext)
+        return RoulettePageService(repository: dummyRepo)
+    }()
+
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
     @State private var triggerHaptics = false
-    @State private var isLinkActive = false
+    @State private var isClicked = false
+    
+    @State private var isGotoRouletteView = false
+    @State private var isGotoHistoryView = false
+    
     @State var selectedPreferences: [String] = []
-
+    
     private let now = Date.now
     
     func normalizedKey(from name: String) -> String {
@@ -54,12 +71,17 @@ struct MainView: View {
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-
+                            isGotoHistoryView.toggle()
                         } label: {
                             Image(
                                 systemName:
                                     "clock.arrow.trianglehead.counterclockwise.rotate.90"
                             )
+                        }
+                        .navigationDestination(isPresented: $isGotoHistoryView) {
+                            HistoryPageView()
+                                .navigationTitle("History Page")
+                                .environmentObject(rouletteService)
                         }
                         .padding([.trailing], Sizing.md)
                         .foregroundStyle(Color("KombuGreen"))
@@ -68,15 +90,13 @@ struct MainView: View {
                 
                 VStack {
                     Button(action: {
-                        // ✅ Guard condition before navigation
                         guard !selectedPreferences.isEmpty else {
-                            // You could show an alert here
                             return
                         }
                         triggerHaptics.toggle()
-                        isLinkActive = true
+                        isGotoRouletteView = true
                     }) {
-                        Label("Spin the wheel", systemImage: "chart.pie.fill")
+                        Label("Find your lucky!", systemImage: "hands.sparkles.fill")
                             .font(.headline)
                             .foregroundColor(.white)
                             .containerRelativeFrame(.horizontal)
@@ -89,18 +109,16 @@ struct MainView: View {
                         .impact(weight: .light),
                         trigger: triggerHaptics
                     )
-                    .frame(height: 64)
+                    .frame(height: Sizing.xl2)
                     .buttonStyle(.borderedProminent)
-                    .cornerRadius(28)
-                }
-                // ✅ New way to trigger navigation
-                .navigationDestination(isPresented: $isLinkActive) {
+                    .cornerRadius(Sizing.lg2)
+                    
+                .navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
-                        preferences: selectedPreferences.map {
-                            value in
-                            return normalizedKey(from: value)
-                        }
+                        preferences: selectedPreferences
                     )
+                    .navigationTitle("Roulette Page")
+                    .environmentObject(rouletteService)
                 }
             }.background(
                 LinearGradient(
@@ -110,9 +128,23 @@ struct MainView: View {
                 )
             )
         }
+        .onAppear {
+            if !isInitialized {
+                rouletteService.userHistoryRepo = UserHistoryRepository(
+                    context: modelContext
+                )
+            )
+        }
+
+        .task {
+            try? await Task.sleep(for: Duration.seconds(1))
+            self.launchScreenState.dismiss()
+        }
+
     }
 }
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

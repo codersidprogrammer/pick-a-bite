@@ -7,6 +7,40 @@
 
 import SwiftUI
 
+struct SouthTriangle: Shape {
+    func path(in rect: CGRect) -> Path {
+            var path = Path()
+
+            let center = CGPoint(x: rect.midX, y: rect.midY)
+            let radius = min(rect.width, rect.height) / 2
+
+            // Points on a circle (in radians): top left, top right, bottom (facing south)
+            let angleOffset = -CGFloat.pi / 2 // Start pointing up, then rotate
+
+            let p1 = CGPoint(
+                x: center.x + radius * cos(angleOffset + .pi / 6),
+                y: center.y + radius * sin(angleOffset + .pi / 6)
+            )
+
+            let p2 = CGPoint(
+                x: center.x + radius * cos(angleOffset - .pi / 6),
+                y: center.y + radius * sin(angleOffset - .pi / 6)
+            )
+
+            let p3 = CGPoint(
+                x: center.x + radius * cos(angleOffset + .pi),
+                y: center.y + radius * sin(angleOffset + .pi)
+            )
+
+            path.move(to: p1)
+            path.addLine(to: p2)
+            path.addLine(to: p3)
+            path.closeSubpath()
+
+            return path
+        }
+}
+
 struct RouletteComponentView: View {
     
     @StateObject var controller: RouletteController
@@ -15,13 +49,9 @@ struct RouletteComponentView: View {
     var body: some View {
         VStack{
             Spacer()
-            Image("arrow")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 25, height: 25, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            
             GeometryReader{ geometry in
                 ZStack{
+                    
                     ForEach(Array(controller.segmentData.enumerated()), id: \.element.index) { index, data in
                         ZStack{
                             SegmentShape(
@@ -37,10 +67,10 @@ struct RouletteComponentView: View {
                             }
                             
                             
-                            Text(data.description)
+                            Text(data.description.count > 10 ? "\(data.description.prefix(10)).." : data.description)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(data.color == Color.papayaWhip ? Color.kombuGreen : Color.cosmicLatte)
                                 .fontWeight(.semibold)
                                 .rotationEffect(
                                     angleForSegment(index) - Angle(degrees: 160),
@@ -64,7 +94,7 @@ struct RouletteComponentView: View {
                     }
                     
                     Circle()
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.kombuGreen)
                         .frame(width: 48, height: 48)
                         .onAppear(){
                             let midX  = geometry.frame(in: .local).midX + 40
@@ -74,8 +104,11 @@ struct RouletteComponentView: View {
                         }
                 }
             }
+            SouthTriangle()
+                .fill(Color.kombuGreen)
+                .frame(width: 150, height: 75)
+                .offset(x: 0, y: -420)
             
-            Spacer()
         }
     }
     
@@ -103,7 +136,7 @@ struct RouletteComponentView: View {
         ),
         SegmentData(
             index: Double.random(in: 0...1),
-            color: Color.random(),
+            color: Color.vividTangelo,
             description: "String 4"
         ),
         SegmentData(

@@ -104,5 +104,6 @@ extension Color {
     
     static let primary = Maroon.shade500
     static let secondary = Orange.shade500
+    
 }
 
