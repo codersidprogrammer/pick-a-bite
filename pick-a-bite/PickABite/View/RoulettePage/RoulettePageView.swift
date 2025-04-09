@@ -11,7 +11,7 @@ import SwiftData
 
 struct RoulettePageView: View {
     
-    @EnvironmentObject var service: RoulettePageService<UserHistoryRepository> // TODO: Change this to real repo
+    @EnvironmentObject var service: RoulettePageService<UserHistoryRepository>
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     @State var whenSpinInfoTap: Bool = false
     @State private var animateShadow = false
@@ -108,6 +108,12 @@ struct RoulettePageView: View {
                             return normalizedKey(from: val)
                         })
                     )
+                    do {
+                        let a = try service.userHistoryRepo.fetchAll()
+                        print(a)
+                    } catch {
+                        print(error)
+                    }
                     
                     withAnimation(
                         Animation.easeInOut(duration: 1.2).repeatForever(autoreverses: true)
@@ -144,12 +150,10 @@ struct RoulettePageView: View {
 #Preview {
     @Previewable @State var isInitialized: Bool = false
     var service: RoulettePageService<UserHistoryRepository> = {
-        // NOTE: Dummy init with a temporary context (won't be used)
         let dummyContext = try! ModelContainer(for: UserHistoryModel.self).mainContext
         let dummyRepo = UserHistoryRepository(context: dummyContext)
         return RoulettePageService(repository: dummyRepo)
     }()
-    
     
     RoulettePageView()
         .environmentObject(service)

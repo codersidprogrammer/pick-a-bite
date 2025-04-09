@@ -7,58 +7,61 @@
 
 import SwiftUI
 
+extension Date {
+    func formattedLongDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, dd MMMM yyyy"
+        return formatter.string(from: self)
+    }
+}
+
 struct DailyCard: View {
     @Binding var isPresented: Bool
-
+    var dataModel: UserHistoryModel
+    
     var body: some View {
-        Button {
-            // Tindakan saat card ditekan
-        } label: {
-            VStack(spacing: 0) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Selasa, 12 Maret 2025")
-                            .font(.headline)
-                            .bold()
-                            .foregroundColor(.black)
-
-                        ZStack(alignment: .trailing) {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 8) {
-                                    ForEach(0..<6, id: \.self) { _ in
-                                        CloudTag()
-                                    }
+        VStack(spacing: 0) {
+            HStack {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(dataModel.createdAt.formattedLongDate())
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(.black)
+                    
+                    ZStack(alignment: .trailing) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(dataModel.criteria, id: \.self) { value in
+                                    ChipOutlinedComponentView(value)
                                 }
                             }
-
-                            LinearGradient(
-                                gradient: Gradient(colors: [Color.clear, Color.white]),
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                            .frame(width: 50, height: 31)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
                         }
-                    }
-
-                    Button {
-                        isPresented = true
-                    } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
+                        
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.clear, Color.cosmicLatte]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: 50, height: 31)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                 }
-                .background(Color.white)
-                .padding(.vertical, 16)
-
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(.black)
+                .background(Color.clear)
+                
+                Button {
+                    isPresented = true
+                    print("Goooodd")
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.black)
+                }
             }
+            .background(Color.cosmicLatte)
+            .padding(.vertical, Sizing.md)
         }
     }
 }
 
 #Preview {
-    DailyCard(isPresented: .constant(false))
+    DailyCard(isPresented: .constant(false), dataModel: UserHistoryModel.dummy)
 }

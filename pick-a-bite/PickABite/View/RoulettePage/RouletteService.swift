@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.EntityModel == UserHistoryModel {
     let service: MainPredictService = MainPredictService()
     var userHistoryRepo: R

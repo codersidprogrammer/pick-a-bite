@@ -23,7 +23,10 @@ struct MainView: View {
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
     @State private var isClicked = false
-    @State private var isLinkActive = false
+    
+    @State private var isGotoRouletteView = false
+    @State private var isGotoHistoryView = false
+    
     @State var selectedPreferences: [String] = []
     
     private let now = Date.now
@@ -57,12 +60,17 @@ struct MainView: View {
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            
+                            isGotoHistoryView.toggle()
                         } label: {
                             Image(
                                 systemName:
                                     "clock.arrow.trianglehead.counterclockwise.rotate.90"
                             )
+                        }
+                        .navigationDestination(isPresented: $isGotoHistoryView) {
+                            HistoryPageView()
+                                .navigationTitle("History Page")
+                                .environmentObject(rouletteService)
                         }
                         .padding([.trailing], Sizing.md)
                         .foregroundStyle(Color("KombuGreen"))
@@ -75,7 +83,7 @@ struct MainView: View {
                             return
                         }
                         isClicked.toggle()
-                        isLinkActive = true
+                        isGotoRouletteView = true
                     }) {
                         Label("Find your lucky!", systemImage: "hands.sparkles.fill")
                             .font(.headline)
@@ -94,7 +102,7 @@ struct MainView: View {
                     .buttonStyle(.borderedProminent)
                     .cornerRadius(Sizing.lg2)
                 }
-                .navigationDestination(isPresented: $isLinkActive) {
+                .navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
                         preferences: selectedPreferences
                     )

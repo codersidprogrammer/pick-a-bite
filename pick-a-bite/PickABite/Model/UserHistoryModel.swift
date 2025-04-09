@@ -50,3 +50,34 @@ final class UserHistoryModel: JSONEncodable {
         try container.encode(createdAt, forKey: .createdAt)
     }
 }
+
+
+extension UserHistoryModel {
+    static var dummy: UserHistoryModel {
+        UserHistoryModel(
+            tenantName: "Dummy Tenant",
+            criteria: ["Spicy", "Sweet", "Vegan"],
+            spinSequence: 1
+        )
+    }
+
+    static var sampleList: [UserHistoryModel] {
+        [
+            UserHistoryModel(
+                tenantName: "Alice",
+                criteria: ["Sweet", "Cold"],
+                spinSequence: 2
+            ),
+            UserHistoryModel(
+                tenantName: "Bob",
+                criteria: ["Spicy", "Fried"],
+                spinSequence: 5
+            ),
+            UserHistoryModel(
+                tenantName: "Charlie",
+                criteria: ["Savory"],
+                spinSequence: 3
+            )
+        ]
+    }
+}
