@@ -10,10 +10,21 @@ import SwiftData
 
 @main
 struct PickABiteApp: App {
+    @StateObject var launchScreenState = LaunchScreenStateManager()
+    
     var body: some Scene {
         WindowGroup {
-            MainView()
+            ZStack {
+                MainView()
+                
+                if launchScreenState.state != .finished {
+                    LaunchScreenView()
+                }
+            }.environmentObject(launchScreenState)
         }
-        .environment(\.modelContext, RepositoryInitializer.instance.modelContainer.mainContext)
+        .environment(
+            \.modelContext,
+             RepositoryInitializer.instance.modelContainer.mainContext
+        )
     }
 }

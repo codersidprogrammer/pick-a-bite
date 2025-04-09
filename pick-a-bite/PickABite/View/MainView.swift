@@ -9,16 +9,18 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    
     @Environment(\.modelContext) private var modelContext
     @StateObject private var rouletteService:
-        RoulettePageService<UserHistoryRepository> = {
-            // NOTE: Dummy init with a temporary context (won't be used)
-            let dummyContext = try! ModelContainer(
-                for: UserHistoryModel.self
-            ).mainContext
-            let dummyRepo = UserHistoryRepository(context: dummyContext)
-            return RoulettePageService(repository: dummyRepo)
-        }()
+    RoulettePageService<UserHistoryRepository> = {
+        // NOTE: Dummy init with a temporary context (won't be used)
+        let dummyContext = try! ModelContainer(
+            for: UserHistoryModel.self
+        ).mainContext
+        let dummyRepo = UserHistoryRepository(context: dummyContext)
+        return RoulettePageService(repository: dummyRepo)
+    }()
 
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
@@ -30,7 +32,7 @@ struct MainView: View {
 
     func normalizedKey(from name: String) -> String {
         let components =
-            name
+        name
             .components(separatedBy: .whitespaces)
             .filter { !$0.contains(where: { $0.isEmoji }) }
         return components.joined(separator: "_")
@@ -114,7 +116,11 @@ struct MainView: View {
                     .environmentObject(rouletteService)
                 }
             }.background(
-                LinearGradient(colors: [.cosmicLatte, .papayaWhip], startPoint: .top, endPoint: .bottom)
+                LinearGradient(
+                    colors: [.cosmicLatte, .papayaWhip],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             )
         }
         .onAppear {
@@ -125,10 +131,14 @@ struct MainView: View {
                 isInitialized = true
             }
         }
-
+        .task {
+            try? await Task.sleep(for: Duration.seconds(1))
+            self.launchScreenState.dismiss()
+        }
     }
 }
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }
