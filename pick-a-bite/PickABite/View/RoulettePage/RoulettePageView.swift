@@ -14,6 +14,7 @@ struct RoulettePageView: View {
     @EnvironmentObject var service: RoulettePageService<UserHistoryRepository> // TODO: Change this to real repo
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     @State var whenSpinInfoTap: Bool = false
+    @State private var animateShadow = false
     
     var whenNotHavingChance: Binding<Bool> {
         Binding(
@@ -26,95 +27,118 @@ struct RoulettePageView: View {
     
     init() {
         self.preferences = [
-            "Spicy",
-            "Coffee",
-            "Cozy"
+            "🌶️ Spicy",
+            "☕️ Coffee",
+            "😌 Cozy"
         ]
     }
     init(preferences: [String]) {
         self.preferences = preferences
     }
     
+    func normalizedKey(from name: String) -> String {
+        let components =
+        name
+            .components(separatedBy: .whitespaces)
+            .filter { !$0.contains(where: { $0.isEmoji }) }
+        return components.joined(separator: "_")
+    }
+    
     var body: some View {
-        NavigationView {
+        VStack {
             VStack(alignment: .leading) {
-                
                 Text("Your Preferences")
                     .font(.headline)
+                    .foregroundStyle(Color.kombuGreen)
                     .padding(.horizontal, Sizing.md)
-                    .padding(.top, Sizing.xl)
+                    .padding(.top, Sizing.lg3)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Sizing.xs) {
                         ForEach(preferences, id: \.self) { value in
                             ChipOutlinedComponentView(value)
+                                .padding(.trailing, Sizing.xs)
                         }
                     }
                     .padding(.horizontal, Sizing.md)
                 }
-                
-                RouletteComponentView(controller: rouletteController)
-                    .navigationTitle("Roulette Page")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .padding(.all, Sizing.md)
-                    .sheet(isPresented: $rouletteController.isSelected) {
-                        HalfSheetView(
-                            selectedSegment: $rouletteController.selectedSegment,
-                            rouletteController: .constant(rouletteController)
-                        )
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.visible)
-                        .onAppear(){
-                            do {
-                                try service.userHistoryRepo.add(
-                                    UserHistoryModel(
-                                        tenantName: rouletteController.selectedSegment.description,
-                                        
-                                        // TODO: Change this into real selected preferences
-                                        criteria: preferences.map{
-                                            value in
-                                            return value
-                                        },
-                                        spinSequence: rouletteController.countChances
-                                    )
-                                )
-                            } catch let error {
-                                Logger.error(error.localizedDescription)
-                            }
-                        }
-                    }
-                    .alert("Oops!", isPresented: whenNotHavingChance) {
-                        
-                    } message: {
-                        Text("Unfortunatelly! you have no any chances now")
-                    }
-                    .onAppear(){
-                        rouletteController.setSegment(
-                            data: service.predictAsSegmentData(preffs: preferences)
-                        )
-                    }
-                    .onTapGesture {
-                        rouletteController.spin()
-                    }
-                Spacer()
-                SimpleCardComponentView(
-                    title: "Spin count \(rouletteController.countChances)x",
-                    subtitle: "Tap me for detail",
-                    iconName: "info.circle.fill",
-                    iconColor: .primary
+            }
+            .padding(.bottom, Sizing.xl3)
+            
+            RouletteComponentView(controller: rouletteController)
+                .shadow(
+                    color: Color.kombuGreen.opacity(animateShadow ? 0.6 : 0.2),
+                    radius: animateShadow ? Sizing.lg : Sizing.md
                 )
                 .padding(.all, Sizing.md)
-                .onTapGesture {
-                    whenSpinInfoTap.toggle()
+                .sheet(isPresented: $rouletteController.isSelected) {
+                    HalfSheetView(
+                        selectedSegment: $rouletteController.selectedSegment,
+                        rouletteController: .constant(rouletteController)
+                    )
+                    .presentationDetents([.fraction(0.5)])
+                    .presentationDragIndicator(.visible)
+                    .onAppear(){
+                        do {
+                            try service.userHistoryRepo.add(
+                                UserHistoryModel(
+                                    tenantName: rouletteController.selectedSegment.description,
+                                    
+                                    // TODO: Change this into real selected preferences
+                                    criteria: preferences.map{
+                                        value in
+                                        return value
+                                    },
+                                    spinSequence: rouletteController.countChances
+                                )
+                            )
+                        } catch let error {
+                            Logger.error(error.localizedDescription)
+                        }
+                    }
                 }
-                .alert("Info", isPresented: $whenSpinInfoTap) {
+                .alert("Oops!", isPresented: whenNotHavingChance) {
                     
                 } message: {
-                    Text("Every day you only have 3 chances to spin, so make sure to use them wisely! Good luck!")
+                    Text("Unfortunatelly! you have no any chances now")
                 }
-            }
+                .onAppear(){
+                    rouletteController.setSegment(
+                        data: service.predictAsSegmentData(preffs: preferences.map{
+                            val in
+                            return normalizedKey(from: val)
+                        })
+                    )
+                    
+                    withAnimation(
+                        Animation.easeInOut(duration: 1.2).repeatForever(autoreverses: true)
+                    ) {
+                        animateShadow.toggle()
+                    }
+                }
+            
+            Spacer()
+            PrimaryButtonComponentView(
+                "SPIN!!",
+                action: {
+                    rouletteController.spin()
+                },
+                iconName: ""
+            )
+            .padding(.horizontal, Sizing.md)
+            
         }
-        
+        .background(
+            ZStack {
+                Color.cosmicLatte
+                    .ignoresSafeArea()
+//                Image("VividPattern")
+//                    .resizable()
+//                    .scaledToFill()
+//                    .opacity(0.2)
+                
+            }
+        )
     }
 }
 
@@ -137,11 +161,4 @@ struct RoulettePageView: View {
                 isInitialized = true
             }
         }
-    
-    Button("Show Log") {
-        let test = try! service.userHistoryRepo.fetchAll()
-        for t in test {
-            Logger.log(t.toJsonString() ?? "{}")
-        }
-    }
 }

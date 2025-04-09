@@ -12,31 +12,30 @@ struct HalfSheetView: View {
     @Binding var rouletteController: RouletteController
     
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .center){
             CardMediaComponentView(
                 title: selectedSegment.description,
-                subtitle: "default subtitle",
+                subtitle: "",
                 imageName: "default_restaurant",
-                location: "default location",
-                distance: "0",
+                location: "Hope this is best for you",
+                distance: "",
                 buttonAction: {
-                    Logger.log("Came from half sheet")
+                    if let url = URL(string: "http://maps.apple.com/?q=\(selectedSegment.description)") {
+                        UIApplication.shared.open(url)
+                    }
                 },
-                buttonIconName: "map.fill"
+                buttonIconName: "safari.fill"
             )
-            .padding(.vertical, Sizing.xl)
+            .padding(.vertical, Sizing.lg3)
             .padding(.horizontal, Sizing.sm)
             
             Spacer()
-            Text("Maybe you'll like")
-                .font(.headline)
-                .padding(.leading, Sizing.md)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
+            VStack(alignment: .leading) {
+                Text("Maybe you'll like")
+                    .font(.headline)
+                    .padding(.leading, Sizing.md)
                 HStack(spacing: Sizing.xs) {
                     let segmentData = Array(rouletteController.segmentData.enumerated())
-                    
-                    
                     if segmentData.count > 1 {
                         let takeTwo = segmentData.shuffled().prefix(2)
                         ForEach(takeTwo, id: \.offset) { index, segment in
@@ -44,30 +43,42 @@ struct HalfSheetView: View {
                                 title: segment.description,
                                 subtitle: "Nice to try"
                             )
+                            .padding(.trailing, Sizing.sm)
                             .onTapGesture {
-                                // TODO: change to actual action
-                                Logger.log("You choose \(segment.description)")
+                                if let url = URL(string: "http://maps.apple.com/?q=\(selectedSegment.description)") {
+                                    UIApplication.shared.open(url)
+                                }
                             }
                         }
                     }
                 }
                 .padding(.horizontal, Sizing.md)
+                .padding(.bottom, Sizing.lg3)
+                //                ScrollView(.horizontal, showsIndicators: false) {
+                //
+                //                }
+                //                .padding(.bottom, Sizing.lg3)
             }
-            .padding(.bottom, Sizing.xl)
             
-            Text("Want try more?")
-                .font(.headline)
-                .padding(.leading, Sizing.md)
             
-            PrimaryButtonComponentView(
-                "Spin more (\(rouletteController.countChances)x)",
-                action: {
-                    rouletteController.isSelected.toggle()
-                    rouletteController.spin()
-                },
-                isDisabled: !rouletteController.havingChance
-            )
+            VStack(alignment: .leading){
+                Text("Want try more?")
+                    .font(.headline)
+                
+                PrimaryButtonComponentView(
+                    "Spin more (\(rouletteController.countChances)x)",
+                    action: {
+                        rouletteController.isSelected.toggle()
+                        rouletteController.spin()
+                    },
+                    isDisabled: !rouletteController.havingChance
+                )
+            }
+            .padding(.horizontal, Sizing.md)
+            
+            
         }
+        .background(Color.cosmicLatte)
     }
 }
 

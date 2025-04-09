@@ -19,7 +19,7 @@ struct CardMediaComponentView: View {
     
     
     var body: some View {
-        HStack(alignment: .center, spacing: Sizing.xl) {
+        HStack(alignment: .center, spacing: Sizing.lg3) {
             Image(imageName)
                 .resizable()
                 .scaledToFit()
@@ -33,23 +33,16 @@ struct CardMediaComponentView: View {
                     .font(.caption)
                     .padding(.bottom, Sizing.md)
                 
-                HStack {
-                    Text(location)
-                        .font(.caption)
-                        .foregroundStyle(.gray)
-                    Text("•")
-                    Text("\(distance)m")
-                        .font(.caption)
-                        .foregroundStyle(.gray)
-                        .padding(.trailing, Sizing.xs)
-                }
+                Text(location)
+                    .font(.caption)
+                    .foregroundStyle(.gray)
             }
             Button(action: {
                 buttonAction()
             }) {
                 Image(systemName: buttonIconName)
                     .font(.title)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Color.kombuGreen)
             }
         }
     }

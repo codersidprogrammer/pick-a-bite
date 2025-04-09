@@ -17,7 +17,7 @@ struct ChipOutlinedComponentView: View {
     var body: some View {
         HStack {
             Text(text)
-                .foregroundStyle(Color.primary)
+                .foregroundStyle(Color.kombuGreen)
                 .font(.caption)
                 .fontWeight(.medium)
                 .padding(.trailing, Sizing.xs)
@@ -26,11 +26,11 @@ struct ChipOutlinedComponentView: View {
         .padding(.all, Sizing.sm)
         .overlay(
             Capsule()
-                .stroke(Color.primary, lineWidth: 1)
+                .stroke(Color.kombuGreen, lineWidth: 1)
         )
         .background(
             Capsule()
-                .fill(Color.clear)
+                .fill(Color.cosmicLatte)
         )
     }
 }

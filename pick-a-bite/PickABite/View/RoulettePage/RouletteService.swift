@@ -34,7 +34,7 @@ class RoulettePageService<R: RepositoryProtocol>: ObservableObject where R.Entit
                 let isEven = index % 2 == 0
                 let segment = SegmentData(
                     index: value,
-                    color: isEven ? Color.primary : Color.secondary,
+                    color: isEven ? Color.papayaWhip : Color.vividTangelo.opacity(1),
                     description: key
                 )
                 return segment
