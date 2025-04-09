@@ -20,10 +20,10 @@ struct FoodCategoryButtonStyle: ButtonStyle {
                     .fill(
                         .shadow(
                             .inner(
-                                color: isActive ? Color(
-                                                            "ButtonDefaultActiveDarkShadow"
-                                                         ) : Color("ButtonDefaultLightShadow"
-                                                                  ),
+                                color: !isEnabled ? Color.cosmicLatte : isActive ? Color(
+                                    "ButtonDefaultActiveDarkShadow"
+                                 ) : Color("ButtonDefaultLightShadow"
+                                          ) ,
                                 radius: 2,
                                 x: 3,
                                 y: 3
@@ -31,11 +31,11 @@ struct FoodCategoryButtonStyle: ButtonStyle {
                         )
                         .shadow(
                             .inner(
-                                color: isActive ? Color(
+                                color: !isEnabled ? Color.cosmicLatte : (isActive ? Color(
                                     "ButtonDefaultActiveLightShadow"
                                 ) : Color(
                                     "ButtonDefaultDarkShadow"
-                                ),
+                                )),
                                 radius: 2,
                                 x: -3,
                                 y: -3
@@ -43,9 +43,9 @@ struct FoodCategoryButtonStyle: ButtonStyle {
                         )
                     )
                     .foregroundColor(
-                        isActive ? .vividTangelo : Color(
+                        !isEnabled ? .cosmicLatte : (isActive ? .vividTangelo : Color(
                             "CosmicLatte"
-                        )
+                        ))
                     )
             )
             .animation(.easeInOut(duration: 0.05), value: isActive)
@@ -70,5 +70,5 @@ struct FoodCategoryButtonStyle: ButtonStyle {
     }
     .buttonStyle(FoodCategoryButtonStyle(
         isActive: isActive
-    ))
+    )).disabled(true)
 }

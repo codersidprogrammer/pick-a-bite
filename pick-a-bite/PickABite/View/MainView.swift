@@ -7,13 +7,13 @@
 
 import SwiftData
 import SwiftUI
+import Foundation
 
 struct MainView: View {
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var rouletteService:
-    RoulettePageService<UserHistoryRepository> = {
+    @StateObject private var rouletteService: RoulettePageService<UserHistoryRepository> = {
         // NOTE: Dummy init with a temporary context (won't be used)
         let dummyContext = try! ModelContainer(
             for: UserHistoryModel.self
@@ -21,7 +21,7 @@ struct MainView: View {
         let dummyRepo = UserHistoryRepository(context: dummyContext)
         return RoulettePageService(repository: dummyRepo)
     }()
-
+    
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
     @State private var isClicked = false
@@ -32,13 +32,13 @@ struct MainView: View {
     @State var selectedPreferences: [String] = []
     
     private let now = Date.now
-
+    
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
                 FilterView(path: $path) {
-                    _preferences in
-                    selectedPreferences = Array(_preferences)
+                    preferences in
+                    selectedPreferences = preferences.map({ $0.name })
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -68,7 +68,9 @@ struct MainView: View {
                                     "clock.arrow.trianglehead.counterclockwise.rotate.90"
                             )
                         }
-                        .navigationDestination(isPresented: $isGotoHistoryView) {
+                        .navigationDestination(
+                            isPresented: $isGotoHistoryView
+                        ) {
                             HistoryPageView()
                                 .navigationTitle("History Page")
                                 .environmentObject(rouletteService)
@@ -83,34 +85,39 @@ struct MainView: View {
                         guard !selectedPreferences.isEmpty else {
                             return
                         }
-                        isClicked.toggle()
                         isGotoRouletteView = true
                     }) {
-                        Label("Find your lucky!", systemImage: "hands.sparkles.fill")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .containerRelativeFrame(.horizontal)
-                            .padding(.horizontal, -36)
-                            .frame(height: 64)
+                        Label(
+                            "Find your lucky!",
+                            systemImage: "hands.sparkles.fill"
+                        )
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .containerRelativeFrame(.horizontal)
+                        .padding(.horizontal, -36)
+                        .frame(height: 64)
                     }
                     .disabled(selectedPreferences.isEmpty)
                     .foregroundStyle(Color("CosmicLatte"))
-                    .sensoryFeedback(
-                        .impact(weight: .light),
-                        trigger: isClicked
-                    )
                     .frame(height: Sizing.xl2)
                     .buttonStyle(.borderedProminent)
                     .cornerRadius(Sizing.lg2)
-                }
-                .navigationDestination(isPresented: $isGotoRouletteView) {
+                    .navigationDestination(isPresented: $isGotoRouletteView) {
+                        RoulettePageView(
+                            preferences: selectedPreferences
+                        )
+                        .navigationTitle("Roulette Page")
+                        .environmentObject(rouletteService)
+                    }
+                }.navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
                         preferences: selectedPreferences
                     )
                     .navigationTitle("Roulette Page")
                     .environmentObject(rouletteService)
                 }
-            }.background(
+            }
+            .background(
                 LinearGradient(
                     colors: [.cosmicLatte, .papayaWhip],
                     startPoint: .top,
@@ -118,20 +125,17 @@ struct MainView: View {
                 )
             )
         }
+        .task {
+            try? await Task.sleep(for: Duration.seconds(1))
+            self.launchScreenState.dismiss()
+        }
         .onAppear {
             if !isInitialized {
                 rouletteService.userHistoryRepo = UserHistoryRepository(
                     context: modelContext
                 )
-                isInitialized = true
             }
         }
-
-        .task {
-            try? await Task.sleep(for: Duration.seconds(1))
-            self.launchScreenState.dismiss()
-        }
-
     }
 }
 
