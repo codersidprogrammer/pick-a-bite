@@ -80,40 +80,33 @@ struct MainView: View {
                     }
                 }
                 
-                VStack {
-                    Button(action: {
-                        guard !selectedPreferences.isEmpty else {
-                            return
-                        }
-                        isGotoRouletteView = true
-                    }) {
-                        Label(
-                            "Find your lucky!",
-                            systemImage: "hands.sparkles.fill"
-                        )
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .containerRelativeFrame(.horizontal)
-                        .padding(.horizontal, -36)
-                        .frame(height: 64)
+                Button(action: {
+                    guard !selectedPreferences.isEmpty else {
+                        return
                     }
-                    .disabled(selectedPreferences.isEmpty)
-                    .foregroundStyle(Color("CosmicLatte"))
-                    .frame(height: Sizing.xl2)
-                    .buttonStyle(.borderedProminent)
-                    .cornerRadius(Sizing.lg2)
-                    .navigationDestination(isPresented: $isGotoRouletteView) {
-                        RoulettePageView(
-                            preferences: selectedPreferences
-                        )
-                        .navigationTitle("Roulette Page")
-                        .environmentObject(rouletteService)
-                    }
-                }.navigationDestination(isPresented: $isGotoRouletteView) {
+                    isGotoRouletteView = true
+                }) {
+                    Label(
+                        "Find your lucky!",
+                        systemImage: "hands.sparkles.fill"
+                    )
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .containerRelativeFrame(.horizontal)
+                    .padding(.horizontal, -36)
+                    .frame(height: 64)
+                }
+                .disabled(selectedPreferences.isEmpty)
+                .foregroundStyle(Color("CosmicLatte"))
+                .frame(height: Sizing.xl2)
+                .buttonStyle(.borderedProminent)
+                .cornerRadius(Sizing.lg2)
+                .navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
                         preferences: selectedPreferences
                     )
                     .navigationTitle("Roulette Page")
+                    .foregroundColor(.kombuGreen)
                     .environmentObject(rouletteService)
                 }
             }
