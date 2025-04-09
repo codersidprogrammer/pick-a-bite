@@ -20,17 +20,18 @@ struct ChipOutlinedComponentView: View {
                 .foregroundStyle(Color.kombuGreen)
                 .font(.caption)
                 .fontWeight(.medium)
-                .padding(.trailing, Sizing.xs)
+                
                 
         }
-        .padding(.all, Sizing.sm)
-        .overlay(
-            Capsule()
-                .stroke(Color.kombuGreen, lineWidth: 1)
-        )
+        .padding(.horizontal, Sizing.md)
+        .padding(.vertical, Sizing.sm)
+//        .overlay(
+//            Capsule()
+//                .stroke(Color.kombuGreen, lineWidth: 1)
+//        )
         .background(
             Capsule()
-                .fill(Color.cosmicLatte)
+                .fill(Color.papayaWhip)
         )
     }
 }

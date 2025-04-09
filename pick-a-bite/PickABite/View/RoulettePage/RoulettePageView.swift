@@ -57,7 +57,6 @@ struct RoulettePageView: View {
                     HStack(spacing: Sizing.xs) {
                         ForEach(preferences, id: \.self) { value in
                             ChipOutlinedComponentView(value)
-                                .padding(.trailing, Sizing.xs)
                         }
                     }
                     .padding(.horizontal, Sizing.md)
