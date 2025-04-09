@@ -10,8 +10,16 @@ import SwiftData
 
 
 struct RoulettePageView: View {
-    
-    @EnvironmentObject var service: RoulettePageService<UserHistoryRepository> // TODO: Change this to real repo
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var service:
+    RoulettePageService<UserHistoryRepository> = {
+        // NOTE: Dummy init with a temporary context (won't be used)
+        let dummyContext = try! ModelContainer(
+            for: UserHistoryModel.self
+        ).mainContext
+        let dummyRepo = UserHistoryRepository(context: dummyContext)
+        return RoulettePageService(repository: dummyRepo)
+    }()
     @StateObject var rouletteController: RouletteController = .init(segmentData: [])
     @State var whenSpinInfoTap: Bool = false
     
