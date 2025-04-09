@@ -9,10 +9,12 @@ import SwiftUI
 
 struct ModalView: View {
     @Binding var isPresented: Bool
+    @Binding var dataModel: UserHistoryModel
+    
     var body: some View {
         VStack(alignment :.leading, spacing: 12) {
             HStack{
-                Text("Selasa, 18 Maret 2025")
+                Text(dataModel.createdAt.formattedLongDate())
                     .font(.title3)
                     .bold()
                     .foregroundColor(.black)
@@ -44,9 +46,8 @@ struct ModalView: View {
             TenantCard()
                 
         }
+        .background(Color.cosmicLatte)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(.horizontal, 30)
-        .padding(.vertical, 20)
 
     }
 }
@@ -78,5 +79,5 @@ struct TenantCard: View {
 }
 
 #Preview {
-    ModalView(isPresented : .constant(true))
+    ModalView(isPresented : .constant(true), dataModel: .constant(UserHistoryModel.dummy))
 }
