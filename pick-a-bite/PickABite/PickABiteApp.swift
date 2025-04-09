@@ -14,6 +14,7 @@ struct PickABiteApp: App {
     
     var body: some Scene {
         WindowGroup {
+//            HapticLoopView()
             ZStack {
                 MainView()
                 

@@ -23,7 +23,7 @@ struct DailyCard: View {
         VStack(spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(dataModel.createdAt.formattedLongDate())
+                    Text(dataModel.tenantName)
                         .font(.headline)
                         .bold()
                         .foregroundColor(.black)
