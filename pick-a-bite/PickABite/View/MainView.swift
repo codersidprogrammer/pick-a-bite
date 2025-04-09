@@ -25,18 +25,13 @@ struct MainView: View {
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
     @State private var isClicked = false
-    @State private var isLinkActive = false
+    
+    @State private var isGotoRouletteView = false
+    @State private var isGotoHistoryView = false
+    
     @State var selectedPreferences: [String] = []
-
+    
     private let now = Date.now
-
-    func normalizedKey(from name: String) -> String {
-        let components =
-        name
-            .components(separatedBy: .whitespaces)
-            .filter { !$0.contains(where: { $0.isEmoji }) }
-        return components.joined(separator: "_")
-    }
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -66,28 +61,32 @@ struct MainView: View {
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-
+                            isGotoHistoryView.toggle()
                         } label: {
                             Image(
                                 systemName:
                                     "clock.arrow.trianglehead.counterclockwise.rotate.90"
                             )
                         }
+                        .navigationDestination(isPresented: $isGotoHistoryView) {
+                            HistoryPageView()
+                                .navigationTitle("History Page")
+                                .environmentObject(rouletteService)
+                        }
                         .padding([.trailing], Sizing.md)
                         .foregroundStyle(Color("KombuGreen"))
                     }
                 }
+                
                 VStack {
                     Button(action: {
-                        // ✅ Guard condition before navigation
                         guard !selectedPreferences.isEmpty else {
-                            // You could show an alert here
                             return
                         }
                         isClicked.toggle()
-                        isLinkActive = true
+                        isGotoRouletteView = true
                     }) {
-                        Label("Spin the wheel", systemImage: "chart.pie.fill")
+                        Label("Find your lucky!", systemImage: "hands.sparkles.fill")
                             .font(.headline)
                             .foregroundColor(.white)
                             .containerRelativeFrame(.horizontal)
@@ -100,19 +99,15 @@ struct MainView: View {
                         .impact(weight: .light),
                         trigger: isClicked
                     )
-                    .frame(height: 64)
+                    .frame(height: Sizing.xl2)
                     .buttonStyle(.borderedProminent)
-                    .cornerRadius(28)
-
+                    .cornerRadius(Sizing.lg2)
                 }
-                // ✅ New way to trigger navigation
-                .navigationDestination(isPresented: $isLinkActive) {
+                .navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
-                        preferences: selectedPreferences.map {
-                            value in
-                            return normalizedKey(from: value)
-                        }
+                        preferences: selectedPreferences
                     )
+                    .navigationTitle("Roulette Page")
                     .environmentObject(rouletteService)
                 }
             }.background(
@@ -131,10 +126,12 @@ struct MainView: View {
                 isInitialized = true
             }
         }
+
         .task {
             try? await Task.sleep(for: Duration.seconds(1))
             self.launchScreenState.dismiss()
         }
+
     }
 }
 

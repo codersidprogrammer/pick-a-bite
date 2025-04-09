@@ -13,7 +13,7 @@ struct PrimaryTextButtonModifier: ViewModifier {
         content
             .font(.headline)
             .foregroundColor(.white)
-            .frame(height: Sizing.xxl)
+            .frame(height: Sizing.xl)
             .frame(maxWidth: .infinity)
             .background(isDisabled ? Color.gray.opacity(0.3) : Color.primary)
             .cornerRadius(Sizing.sm)

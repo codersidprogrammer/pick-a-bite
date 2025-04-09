@@ -13,7 +13,7 @@ struct SimpleCardComponentView: View {
     var iconName: String
     var iconColor: Color
     
-    init(title: String, subtitle: String, iconName: String = "chevron.forward.circle.fill", iconColor: Color = .secondary) {
+    init(title: String, subtitle: String, iconName: String = "info.circle.fill", iconColor: Color = Color.vividTangelo) {
         self.title = title
         self.subtitle = subtitle
         self.iconName = iconName
@@ -28,6 +28,7 @@ struct SimpleCardComponentView: View {
             
             VStack(alignment: .leading) {
                 Text(title)
+                    .foregroundStyle(Color.kombuGreen)
                     .font(.headline)
                 Text(subtitle)
                     .font(.caption)
@@ -36,10 +37,10 @@ struct SimpleCardComponentView: View {
             Spacer()
         }
         .padding()
-        .background(.ultraThinMaterial) // You can use .ultraThinMaterial for glass effect
+        .background(Color.papayaWhip) // You can use .ultraThinMaterial for glass effect
         .overlay(
             RoundedRectangle(cornerRadius: Sizing.xs)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .stroke(Color.papayaWhip.opacity(0.3), lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: Sizing.xs))
         .shadow(radius: 0)
