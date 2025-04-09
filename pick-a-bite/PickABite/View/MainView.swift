@@ -9,6 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
+    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    
     @Environment(\.modelContext) private var modelContext
     @StateObject private var rouletteService:
     RoulettePageService<UserHistoryRepository> = {
@@ -19,7 +21,7 @@ struct MainView: View {
         let dummyRepo = UserHistoryRepository(context: dummyContext)
         return RoulettePageService(repository: dummyRepo)
     }()
-    
+
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
     @State private var isClicked = false
@@ -30,8 +32,7 @@ struct MainView: View {
     @State var selectedPreferences: [String] = []
     
     private let now = Date.now
-    
-    
+
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
@@ -110,7 +111,11 @@ struct MainView: View {
                     .environmentObject(rouletteService)
                 }
             }.background(
-                LinearGradient(colors: [.cosmicLatte, .papayaWhip], startPoint: .top, endPoint: .bottom)
+                LinearGradient(
+                    colors: [.cosmicLatte, .papayaWhip],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             )
         }
         .onAppear {
@@ -121,10 +126,16 @@ struct MainView: View {
                 isInitialized = true
             }
         }
-        
+
+        .task {
+            try? await Task.sleep(for: Duration.seconds(1))
+            self.launchScreenState.dismiss()
+        }
+
     }
 }
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }
