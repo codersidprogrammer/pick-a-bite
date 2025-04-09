@@ -13,8 +13,7 @@ struct MainView: View {
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var rouletteService:
-    RoulettePageService<UserHistoryRepository> = {
+    @StateObject private var rouletteService: RoulettePageService<UserHistoryRepository> = {
         // NOTE: Dummy init with a temporary context (won't be used)
         let dummyContext = try! ModelContainer(
             for: UserHistoryModel.self
@@ -22,10 +21,9 @@ struct MainView: View {
         let dummyRepo = UserHistoryRepository(context: dummyContext)
         return RoulettePageService(repository: dummyRepo)
     }()
-
+    
     @State var isInitialized: Bool = false
     @State var path = NavigationPath()
-    @State private var triggerHaptics = false
     @State private var isClicked = false
     
     @State private var isGotoRouletteView = false
@@ -35,14 +33,6 @@ struct MainView: View {
     
     private let now = Date.now
     
-    func normalizedKey(from name: String) -> String {
-        let components =
-        name
-            .components(separatedBy: .whitespaces)
-            .filter { !$0.contains(where: { $0.isEmoji }) }
-        return components.joined(separator: "_")
-    }
-
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
@@ -78,7 +68,9 @@ struct MainView: View {
                                     "clock.arrow.trianglehead.counterclockwise.rotate.90"
                             )
                         }
-                        .navigationDestination(isPresented: $isGotoHistoryView) {
+                        .navigationDestination(
+                            isPresented: $isGotoHistoryView
+                        ) {
                             HistoryPageView()
                                 .navigationTitle("History Page")
                                 .environmentObject(rouletteService)
@@ -93,34 +85,39 @@ struct MainView: View {
                         guard !selectedPreferences.isEmpty else {
                             return
                         }
-                        triggerHaptics.toggle()
                         isGotoRouletteView = true
                     }) {
-                        Label("Find your lucky!", systemImage: "hands.sparkles.fill")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .containerRelativeFrame(.horizontal)
-                            .padding(.horizontal, -36)
-                            .frame(height: 64)
+                        Label(
+                            "Find your lucky!",
+                            systemImage: "hands.sparkles.fill"
+                        )
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .containerRelativeFrame(.horizontal)
+                        .padding(.horizontal, -36)
+                        .frame(height: 64)
                     }
                     .disabled(selectedPreferences.isEmpty)
                     .foregroundStyle(Color("CosmicLatte"))
-                    .sensoryFeedback(
-                        .impact(weight: .light),
-                        trigger: triggerHaptics
-                    )
                     .frame(height: Sizing.xl2)
                     .buttonStyle(.borderedProminent)
                     .cornerRadius(Sizing.lg2)
-                    
-                .navigationDestination(isPresented: $isGotoRouletteView) {
+                    .navigationDestination(isPresented: $isGotoRouletteView) {
+                        RoulettePageView(
+                            preferences: selectedPreferences
+                        )
+                        .navigationTitle("Roulette Page")
+                        .environmentObject(rouletteService)
+                    }
+                }.navigationDestination(isPresented: $isGotoRouletteView) {
                     RoulettePageView(
                         preferences: selectedPreferences
                     )
                     .navigationTitle("Roulette Page")
                     .environmentObject(rouletteService)
                 }
-            }.background(
+            }
+            .background(
                 LinearGradient(
                     colors: [.cosmicLatte, .papayaWhip],
                     startPoint: .top,
@@ -128,19 +125,17 @@ struct MainView: View {
                 )
             )
         }
+        .task {
+            try? await Task.sleep(for: Duration.seconds(1))
+            self.launchScreenState.dismiss()
+        }
         .onAppear {
             if !isInitialized {
                 rouletteService.userHistoryRepo = UserHistoryRepository(
                     context: modelContext
                 )
-            )
+            }
         }
-
-        .task {
-            try? await Task.sleep(for: Duration.seconds(1))
-            self.launchScreenState.dismiss()
-        }
-
     }
 }
 

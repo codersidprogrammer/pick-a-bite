@@ -26,7 +26,6 @@ struct FilterView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.kombuGreen)
                     Text("Pick your top 5 (or fewer) and let us surprise your taste 🎉")
-                        .frame(width: 480)
                         .multilineTextAlignment(.center)
                         .font(.caption)
                         .foregroundColor(.kombuGreen.opacity(0.7))
