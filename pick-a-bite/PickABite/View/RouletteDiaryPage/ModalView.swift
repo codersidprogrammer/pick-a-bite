@@ -86,26 +86,10 @@ struct ModalView: View {
                 }
                 
                 .padding(.horizontal, 0)
-                    
-                
-
-//                if !dataModel.criteria.isEmpty {
-//                    Text("Your selected criteria:")
-//                        .font(.subheadline)
-//                        .bold()
-//                        .padding(.top)
-//
-//                    ForEach(dataModel.criteria, id: \.self) { criterion in
-//                        Text("• \(criterion)")
-//                            .font(.body)
-//                    }
-//                } else {
-//                    Text("No specific criteria selected.")
-//                        .foregroundColor(.gray)
-//                        .padding(.top)
-//                }
+              
             }
             .padding()
+
         }
     }
 }
