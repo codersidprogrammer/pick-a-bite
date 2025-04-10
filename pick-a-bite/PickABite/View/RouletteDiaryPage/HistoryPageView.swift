@@ -18,7 +18,7 @@ struct HistoryPageView: View {
                 }
             } else {
                 List {
-                    ForEach(Array(groupedHistories.sorted(by: { $0.key > $1.key }).enumerated()), id: \.offset) { index, value in
+                    ForEach(Array(groupedHistories.sorted(by: { $0.key < $1.key }).enumerated()), id: \.offset) { index, value in
                         Section(header: Text(value.key)
                             .font(.headline)
                             .foregroundColor(.gray)
@@ -41,6 +41,7 @@ struct HistoryPageView: View {
                         .padding(.vertical, Sizing.sm)
                         .presentationDetents([.fraction(0.6)])
                         .presentationDragIndicator(.visible)
+                        .background(Color.cosmicLatte)
                 }
             }
         }

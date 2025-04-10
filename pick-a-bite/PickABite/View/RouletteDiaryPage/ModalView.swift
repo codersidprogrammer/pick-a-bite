@@ -12,43 +12,49 @@ struct ModalView: View {
     @Binding var dataModel: UserHistoryModel
     
     var body: some View {
-        VStack(alignment :.leading, spacing: 12) {
-            HStack{
-                Text(dataModel.createdAt.formattedLongDate())
+        ScrollView {
+            
+            
+            VStack(alignment :.leading, spacing: 12) {
+                HStack{
+                    Text(dataModel.createdAt.formattedLongDate())
+                        .font(.title3)
+                        .bold()
+                        .foregroundColor(.black)
+                    
+                    Spacer()
+                    
+                    Button("Done", role: .cancel) {
+                        isPresented = false
+                    }
                     .font(.title3)
+                    
+                }
+                
+                HStack {
+                    
+                }
+                
+                Text("1st Spin")
+                    .font(.subheadline)
                     .bold()
                     .foregroundColor(.black)
-                
-                Spacer()
-                
-                Button("Done", role: .cancel) {
-                    isPresented = false
-                }
-                .font(.title3)
-                
-            }
-            
-            HStack {
+                TenantCard()
+                TenantCard()
+                Text("2nd Spin")
+                    .font(.subheadline)
+                    .bold()
+                    .foregroundColor(.black)
+                TenantCard()
+                TenantCard()
                 
             }
+            .background(Color.cosmicLatte)
+            //        .padding(.top, 72)
+            .padding(.horizontal, 8)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             
-            Text("1st Spin")
-                .font(.subheadline)
-                .bold()
-                .foregroundColor(.black)
-            TenantCard()
-            TenantCard()
-            Text("2nd Spin")
-                .font(.subheadline)
-                .bold()
-                .foregroundColor(.black)
-            TenantCard()
-            TenantCard()
-                
         }
-        .background(Color.cosmicLatte)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-
     }
 }
 
