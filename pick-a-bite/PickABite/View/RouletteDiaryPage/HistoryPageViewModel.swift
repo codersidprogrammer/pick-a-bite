@@ -13,11 +13,13 @@ class HistoryViewService: ObservableObject {
     @Published var histories: [UserHistoryModel] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    var tenants: [TenantModel]
 
     var repository: UserHistoryRepository
 
-    init(repository: UserHistoryRepository) {
+    init(repository: UserHistoryRepository, tenants: [TenantModel] = []) {
         self.repository = repository
+        self.tenants = tenants
         fetchHistories()
     }
 
