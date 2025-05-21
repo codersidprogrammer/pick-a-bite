@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E9F178EF2DCDE23100D98672 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F178EE2DCDE23100D98672 /* WidgetKit.framework */; };
+		E9F178F12DCDE23100D98672 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F178F02DCDE23100D98672 /* SwiftUI.framework */; };
+		E9F179022DCDE23100D98672 /* PABWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E9F178EC2DCDE23100D98672 /* PABWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		AA61EFF62D92AB4E009114F2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,12 +27,38 @@
 			remoteGlobalIDString = AA61EFE22D92AB4D009114F2;
 			remoteInfo = PickABite;
 		};
+		E9F179002DCDE23100D98672 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA61EFDB2D92AB4D009114F2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9F178EB2DCDE23100D98672;
+			remoteInfo = PABWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E9F178512DCDDF7100D98672 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E9F179022DCDE23100D98672 /* PABWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AA61EFE32D92AB4D009114F2 /* PickABite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PickABite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA61EFF52D92AB4E009114F2 /* PickABiteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PickABiteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA61EFFF2D92AB4E009114F2 /* PickABiteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PickABiteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95667712DD5E9C300AF1D51 /* PABWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PABWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
+		E95667742DD5F0D900AF1D51 /* PABWidgetExtensionRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PABWidgetExtensionRelease.entitlements; sourceTree = "<group>"; };
+		E9F178EC2DCDE23100D98672 /* PABWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PABWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9F178EE2DCDE23100D98672 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		E9F178F02DCDE23100D98672 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +68,13 @@
 				Info.plist,
 			);
 			target = AA61EFE22D92AB4D009114F2 /* PickABite */;
+		};
+		E9F179062DCDE23100D98672 /* Exceptions for "PABWidget" folder in "PABWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E9F178EB2DCDE23100D98672 /* PABWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -56,6 +95,14 @@
 		AA61F0022D92AB4E009114F2 /* PickABiteUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = PickABiteUITests;
+			sourceTree = "<group>";
+		};
+		E9F178F22DCDE23100D98672 /* PABWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E9F179062DCDE23100D98672 /* Exceptions for "PABWidget" folder in "PABWidgetExtension" target */,
+			);
+			path = PABWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -82,15 +129,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E9F178E92DCDE23100D98672 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9F178F12DCDE23100D98672 /* SwiftUI.framework in Frameworks */,
+				E9F178EF2DCDE23100D98672 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		AA61EFDA2D92AB4D009114F2 = {
 			isa = PBXGroup;
 			children = (
+				E95667742DD5F0D900AF1D51 /* PABWidgetExtensionRelease.entitlements */,
+				E95667712DD5E9C300AF1D51 /* PABWidgetExtensionDebug.entitlements */,
 				AA61EFE52D92AB4D009114F2 /* PickABite */,
 				AA61EFF82D92AB4E009114F2 /* PickABiteTests */,
 				AA61F0022D92AB4E009114F2 /* PickABiteUITests */,
+				E9F178F22DCDE23100D98672 /* PABWidget */,
+				E9F178ED2DCDE23100D98672 /* Frameworks */,
 				AA61EFE42D92AB4D009114F2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,8 +161,18 @@
 				AA61EFE32D92AB4D009114F2 /* PickABite.app */,
 				AA61EFF52D92AB4E009114F2 /* PickABiteTests.xctest */,
 				AA61EFFF2D92AB4E009114F2 /* PickABiteUITests.xctest */,
+				E9F178EC2DCDE23100D98672 /* PABWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E9F178ED2DCDE23100D98672 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E9F178EE2DCDE23100D98672 /* WidgetKit.framework */,
+				E9F178F02DCDE23100D98672 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -115,10 +185,12 @@
 				AA61EFDF2D92AB4D009114F2 /* Sources */,
 				AA61EFE02D92AB4D009114F2 /* Frameworks */,
 				AA61EFE12D92AB4D009114F2 /* Resources */,
+				E9F178512DCDDF7100D98672 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E9F179012DCDE23100D98672 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				AA61EFE52D92AB4D009114F2 /* PickABite */,
@@ -176,6 +248,28 @@
 			productReference = AA61EFFF2D92AB4E009114F2 /* PickABiteUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		E9F178EB2DCDE23100D98672 /* PABWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9F179032DCDE23100D98672 /* Build configuration list for PBXNativeTarget "PABWidgetExtension" */;
+			buildPhases = (
+				E9F178E82DCDE23100D98672 /* Sources */,
+				E9F178E92DCDE23100D98672 /* Frameworks */,
+				E9F178EA2DCDE23100D98672 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E9F178F22DCDE23100D98672 /* PABWidget */,
+			);
+			name = PABWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = PABWidgetExtension;
+			productReference = E9F178EC2DCDE23100D98672 /* PABWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -197,6 +291,9 @@
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = AA61EFE22D92AB4D009114F2;
 					};
+					E9F178EB2DCDE23100D98672 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = AA61EFDE2D92AB4D009114F2 /* Build configuration list for PBXProject "PickABite" */;
@@ -216,6 +313,7 @@
 				AA61EFE22D92AB4D009114F2 /* PickABite */,
 				AA61EFF42D92AB4E009114F2 /* PickABiteTests */,
 				AA61EFFE2D92AB4E009114F2 /* PickABiteUITests */,
+				E9F178EB2DCDE23100D98672 /* PABWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -236,6 +334,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA61EFFD2D92AB4E009114F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9F178EA2DCDE23100D98672 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -266,6 +371,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E9F178E82DCDE23100D98672 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -278,6 +390,11 @@
 			isa = PBXTargetDependency;
 			target = AA61EFE22D92AB4D009114F2 /* PickABite */;
 			targetProxy = AA61F0002D92AB4E009114F2 /* PBXContainerItemProxy */;
+		};
+		E9F179012DCDE23100D98672 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9F178EB2DCDE23100D98672 /* PABWidgetExtension */;
+			targetProxy = E9F179002DCDE23100D98672 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -410,7 +527,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PickABite/Preview Content\"";
-				DEVELOPMENT_TEAM = BWQ84S563U;
+				DEVELOPMENT_TEAM = B3DRR5ATWV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PickABite/Info.plist;
@@ -426,7 +543,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.team30.PickABite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pabteam.pickabite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -447,7 +564,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PickABite/Preview Content\"";
-				DEVELOPMENT_TEAM = BWQ84S563U;
+				DEVELOPMENT_TEAM = B3DRR5ATWV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PickABite/Info.plist;
@@ -463,7 +580,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.team30.PickABite;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pabteam.pickabite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -547,6 +664,62 @@
 			};
 			name = Release;
 		};
+		E9F179042DCDE23100D98672 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PABWidgetExtensionDebug.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3DRR5ATWV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PABWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PABWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pabteam.pickabite.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E9F179052DCDE23100D98672 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = PABWidgetExtensionRelease.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3DRR5ATWV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PABWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = PABWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pabteam.pickabite.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -582,6 +755,15 @@
 			buildConfigurations = (
 				AA61F0102D92AB4E009114F2 /* Debug */,
 				AA61F0112D92AB4E009114F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9F179032DCDE23100D98672 /* Build configuration list for PBXNativeTarget "PABWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9F179042DCDE23100D98672 /* Debug */,
+				E9F179052DCDE23100D98672 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
